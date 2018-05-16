@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Husky" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Husky" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Husky" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="core/hky_array.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_array.h" />
+		<Unit filename="core/hky_buf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_buf.h" />
+		<Unit filename="core/hky_conf_file.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_conf_file.h" />
+		<Unit filename="core/hky_config.h" />
+		<Unit filename="core/hky_connection.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_connection.h" />
+		<Unit filename="core/hky_core.h" />
+		<Unit filename="core/hky_cycle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_cycle.h" />
+		<Unit filename="core/hky_file.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_file.h" />
+		<Unit filename="core/hky_inet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_inet.h" />
+		<Unit filename="core/hky_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_list.h" />
+		<Unit filename="core/hky_log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_log.h" />
+		<Unit filename="core/hky_module.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_module.h" />
+		<Unit filename="core/hky_palloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_palloc.h" />
+		<Unit filename="core/hky_parse.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_parse.h" />
+		<Unit filename="core/hky_rbtree.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_rbtree.h" />
+		<Unit filename="core/hky_string.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_string.h" />
+		<Unit filename="core/hky_sys_config.h" />
+		<Unit filename="core/hky_sys_header.h" />
+		<Unit filename="core/hky_syslog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_syslog.h" />
+		<Unit filename="core/hky_times.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/hky_times.h" />
+		<Unit filename="core/husky.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core/husky.h" />
+		<Unit filename="unix/hky_alloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_alloc.h" />
+		<Unit filename="unix/hky_atomic.h" />
+		<Unit filename="unix/hky_darwin_config.h" />
+		<Unit filename="unix/hky_darwin_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_errno.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_errno.h" />
+		<Unit filename="unix/hky_files.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_files.h" />
+		<Unit filename="unix/hky_freebsd_config.h" />
+		<Unit filename="unix/hky_freebsd_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_gcc_atomic_amd64.h" />
+		<Unit filename="unix/hky_gcc_atomic_ppc.h" />
+		<Unit filename="unix/hky_gcc_atomic_sparc64.h" />
+		<Unit filename="unix/hky_gcc_atomic_x86.h" />
+		<Unit filename="unix/hky_linux_config.h" />
+		<Unit filename="unix/hky_linux_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_os.h" />
+		<Unit filename="unix/hky_posix_config.h" />
+		<Unit filename="unix/hky_posix_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_process.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_process.h" />
+		<Unit filename="unix/hky_process_cycle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_process_cycle.h" />
+		<Unit filename="unix/hky_setproctitle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_setproctitle.h" />
+		<Unit filename="unix/hky_solaris_config.h" />
+		<Unit filename="unix/hky_solaris_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_thread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_thread.h" />
+		<Unit filename="unix/hky_time.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unix/hky_time.h" />
+		<Unit filename="win32/hky_win32_config.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

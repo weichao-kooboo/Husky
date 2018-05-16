@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<FileVersion major="1" minor="0" />
+	<ActiveTarget name="Debug" />
+	<File name="unix/hky_linux_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="157" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_gcc_atomic_amd64.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="160" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_parse.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="104" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_string.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="871" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_buf.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="208" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_process_cycle.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="138" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_cycle.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="333" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_freebsd_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="160" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_rbtree.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="65" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_thread.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_process_cycle.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="82" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_syslog.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="519" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_palloc.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="625" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_files.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2004" topLine="61" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_posix_init.c" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="238" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_process.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="92" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_atomic.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4773" topLine="286" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_os.h" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1148" topLine="3" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_darwin_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="159" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_inet.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="211" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_times.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5000" topLine="130" />
+		</Cursor>
+	</File>
+	<File name="core/hky_core.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1331" topLine="51" />
+		</Cursor>
+	</File>
+	<File name="core/hky_list.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="405" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="core/hky_log.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7146" topLine="136" />
+		</Cursor>
+	</File>
+	<File name="core/hky_list.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="60" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_thread.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="448" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_process.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="60" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_errno.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1512" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="core/hky_syslog.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="290" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_connection.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="144" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_file.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="159" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1313" topLine="52" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_setproctitle.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_log.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1913" topLine="71" />
+		</Cursor>
+	</File>
+	<File name="core/hky_conf_file.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="319" topLine="7" />
+		</Cursor>
+	</File>
+	<File name="core/hky_conf_file.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1978" topLine="78" />
+		</Cursor>
+	</File>
+	<File name="core/husky.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1256" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_time.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="575" topLine="24" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_darwin_init.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="268" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_rbtree.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="126" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_cycle.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="161" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_palloc.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1103" topLine="42" />
+		</Cursor>
+	</File>
+	<File name="core/hky_file.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="648" topLine="19" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_alloc.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="474" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_time.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="772" topLine="26" />
+		</Cursor>
+	</File>
+	<File name="core/hky_times.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="714" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_setproctitle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="234" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_posix_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="120" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_sys_config.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="796" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="unix/hky_alloc.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="74" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="core/hky_string.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="473" topLine="19" />
+		</Cursor>
+	</File>
+	<File name="core/hky_array.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="239" topLine="0" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

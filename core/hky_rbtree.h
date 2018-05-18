@@ -55,12 +55,20 @@ void hky_rbtree_insert(hky_rbtree_t *tree,hky_rbtree_node_t *node);
 */
 void hky_rbtree_delete(hky_rbtree_t *tree,hky_rbtree_node_t *node);
 /*
-* ???
+* 当有新的节点插入到树中的时候执行的回掉函数,用于判断插入节点的值和被插入节点值的大小,
+* 来选择被插入节点的左子树还是右子树插入,使用无符号整数判断
+* root:被插入的节点
+* node:插入节点
+* sentinel:用于标记树的结尾
 */
 void hky_rbtree_insert_value(hky_rbtree_node_t *root, hky_rbtree_node_t *node,
     hky_rbtree_node_t *sentinel);
 /*
-* ???
+* 当有新的节点插入到树中的时候执行的回掉函数,用于判断插入节点的值和被插入节点值的大小,
+* 来选择被插入节点的左子树还是右子树插入,使用有符号整数判断
+* root:被插入的节点
+* node:插入节点
+* sentinel:用于标记树的结尾
 */
 void  hky_rbtree_insert_timer_value(hky_rbtree_node_t *root,hky_rbtree_node_t *node,hky_rbtree_node_t *sentinel);
 /*

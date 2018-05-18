@@ -48,7 +48,8 @@ typedef int hky_err_t;
 #define HKY_EBADF         EBADF
 
 
-#define hky_errno errno
+#define hky_errno			errno
+#define hky_socket_errno	errno
 
 hky_uchar *hky_strerror(hky_err_t err,hky_uchar *errstr,size_t size);
 

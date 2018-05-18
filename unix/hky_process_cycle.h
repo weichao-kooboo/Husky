@@ -5,5 +5,6 @@
 #include "../core/hky_core.h"
 
 extern hky_pid_t hky_pid;
+extern hky_uint_t hky_inherited;
 
 #endif // HKY_PROCESS_CYCLE_H_INCLUDED

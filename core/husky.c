@@ -3,6 +3,8 @@
 //保存输入命令参数
 static hky_int_t hky_save_argv(hky_cycle_t *cycle,int argc,char *const *argv);
 static hky_int_t hky_process_options(hky_cycle_t    *cycle);
+
+static hky_int_t hky_add_inherited_sockets(hky_cycle_t *cycle);
 //标记显示帮助
 static hky_uint_t hky_show_help;
 //标记显示版本
@@ -54,6 +56,8 @@ int main(int argc,char *const *argv){
     //日志用法1:记录文件
     hky_log_error(HKY_LOG_NOTICE,log,0,
                                 "using prefix from \"%s\" ",prefix);
+
+
     return 0;
 }
 
@@ -165,4 +169,51 @@ hky_process_options(hky_cycle_t    *cycle){
             cycle->log->log_level=HKY_LOG_INFO;
         }
         return HKY_OK;
+}
+
+
+static hky_int_t hky_add_inherited_sockets(hky_cycle_t *cycle) {
+	hky_char *p, *v, *inherited;
+	hky_int_t s;
+	hky_listening_t *ls;
+
+	inherited = (hky_uchar*)genenv(HUSKY_VAR);
+
+	if (inherited == NULL) {
+		return HKY_OK;
+	}
+
+	hky_log_error(HKY_LOG_NOTICE, cycle->log, 0,
+		"using inherited sockets from \"%s\"", inherited);
+
+	if (hky_array_init(&cycle->listening, cycle->pool, 10, sizeof(hky_listening_t)) != HKY_OK) {
+		return HKY_ERROR;
+	}
+	
+	for (p = inherited, v = p; *p; p++) {
+		if (*p == ':' || *p == ';') {
+			s = hky_atoi(v, p - v);
+			if (s == HKY_ERROR) {
+				hky_log_error(HKY_LOG_EMERG, cycle->log, 0,
+					"invalid socket number \"%s\" in  " HUSKY_VAR
+					"environment variable,ignoring the rest of the variable", v);
+				break;
+			}
+			v = p + 1;
+			ls = hky_array_push(&cycle->listening);
+			if (ls == NULL) {
+				return HKY_ERROR;
+			}
+			hky_memzero(ls, sizeof(hky_listening_t));
+			ls->fd = (hky_socket_t)s;
+		}
+	}
+	if (v != p) {
+		hky_log_error(HKY_LOG_EMERG, cycle->log, 0,
+			"invalid socket number \"%s\" in " HUSKY_VAR
+			" environment variable,ignoring", v);
+	}
+	hky_inherited = 1;
+
+	return hky_set_inherited_sockets(cycle);
 }

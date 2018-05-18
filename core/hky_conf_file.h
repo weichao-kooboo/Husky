@@ -18,6 +18,11 @@ typedef struct {
     hky_uint_t line;
 } hky_conf_file_t;
 
+typedef struct {
+	hky_str_t name;
+	hky_buf_t *buffer;
+} hky_conf_dump_t;
+
 typedef char *(*hky_conf_handler_pt)(hky_conf_t *cf,hky_command_t *dummy,void *conf);
 
 struct hky_conf_s{

@@ -153,6 +153,8 @@ typedef struct aiocb  ngx_aiocb_t;
 
 #endif
 
+#define HKY_LISTEN_BACKLOG 511
+
 
 extern char **environ;
 

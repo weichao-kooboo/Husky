@@ -7,15 +7,22 @@
 typedef struct hky_list_part_s hky_list_part_t;
 
 struct hky_list_part_s{
+	//当前元素的偏移量
     void *elts;
+	//当前part的元素个数
     hky_uint_t nelts;
+	//下一个part
     hky_list_part_t *next;
 };
 
 typedef struct{
+	//part链表的尾指针
     hky_list_part_t *last;
+	//part链表的头指针
     hky_list_part_t part;
+	//每个part中元素的size
     size_t size;
+	//每个part中元素的总个数
     hky_uint_t nalloc;
     hky_pool_t  *pool;
 } hky_list_t;

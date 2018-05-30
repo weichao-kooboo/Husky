@@ -14,4 +14,6 @@ typedef struct{
     char *(*init_conf)(hky_cycle_t *cycle,void *conf);
 } hky_core_module_t;
 
+extern hky_uint_t hky_max_module;
+
 #endif // HKY_MODULE_H_INCLUDED

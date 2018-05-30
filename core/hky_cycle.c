@@ -132,7 +132,21 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 
 	hky_memzero(cycle->listening.elts, n * sizeof(hky_listening_t));
 
-	hky_qeueu_init(&cycle->reusable)
+	hky_qeueu_init(&cycle->reusable_connections_queue);
+
+	cycle->conf_ctx = hky_pcalloc(pool, hky_max_module * sizeof(void*));
+	if (cycle->conf_ctx == NULL) {
+		hky_destory_pool(pool);
+		return NULL;
+	}
+
+	if (gethostname(hostname, HKY_MAXHOSTNAMELEN) == -1) {
+		hky_log_error(HKY_LOG_EMERG, log, hky_errno, "gethostname() failed");
+		hky_destroy_pool(pool);
+		return NULL;
+	}
+
+	hostname[HKY_MAXHOSTNAMELEN - 1] = '\0';
 }
 
 volatile hky_cycle_t  *hky_cycle;

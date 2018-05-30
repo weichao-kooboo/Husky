@@ -21,6 +21,7 @@ struct hky_shm_zone_s {
 };
 
 struct hky_cycle_s{
+	//通过模块的索引保存模块初始化函数create_conf返回的结构
 	void ****conf_ctx;
     hky_pool_t *pool;
 
@@ -31,6 +32,11 @@ struct hky_cycle_s{
 
     hky_list_t open_files;
     hky_list_t shared_memory;
+
+	//所有模块的引用
+	hky_module_t **modules;
+	//加载模块的总数
+	hky_uint_t modules_n;
 
 	hky_queue_t reusable_connections_queue;
 	hky_uint_t   reusable_connections_n;
@@ -53,6 +59,8 @@ struct hky_cycle_s{
     hky_str_t conf_prefix;
 	//记录前缀路径
     hky_str_t prefix;
+	//保存宿主名称
+	hky_str_t hostname;
 };
 
 typedef struct {

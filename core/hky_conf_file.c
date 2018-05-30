@@ -91,3 +91,34 @@ hky_conf_full_name(hky_cycle_t *cycle,hky_str_t *name,hky_uint_t conf_prefix){
     prefix=conf_prefix? &cycle->conf_prefix: &cycle->prefix;
     return hky_get_full_name(cycle->pool,prefix,name);
 }
+char *
+hky_conf_param(hky_conf_t *cf) {
+	char *rv;
+	hky_str_t *param;
+	hky_buf_t b;
+	hky_conf_file_t conf_file;
+
+	param = &cf->cycle->conf_param;
+
+	if (param->len == 0) {
+		return HKY_CONF_OK;
+	}
+
+	hky_memzero(&conf_file, sizeof(hky_conf_file_t));
+
+	hky_memzero(&b, sizeof(hky_buf_t));
+
+	b.start = param->data;
+	b.pos = param->data;
+	b.last = param->data + param->len;
+	b.end = b.last;
+	b.temporary = 1;
+
+	conf_file.file.fd = HKY_INVALID_FILE;
+	conf_file.file.name.data = NULL;
+	conf_file.line = 0;
+}
+char *
+hky_conf_parse(hky_conf_t *cf, hky_str_t *filename) {
+
+}

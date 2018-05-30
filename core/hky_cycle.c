@@ -147,6 +147,64 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 	}
 
 	hostname[HKY_MAXHOSTNAMELEN - 1] = '\0';
+	cycle->hostname.len = hky_strlen(hostname);
+
+	cycle->hostname.data = hky_pnalloc(pool, cycle->hostname.len);
+	if (cycle->hostname.data == NULL) {
+		hky_destroy_pool(pool);
+		return NULL;
+	}
+
+	hky_strlow(cycle->hostname.data, (hky_uchar*)hostname, cycle->hostname.len);
+
+	if (hky_cycle_module(cycle) != HKY_OK) {
+		hky_destroy_pool(pool);
+		return NULL;
+	}
+
+	for (i = 0; cycle->modules[i]; i++) {
+		if (cycle->modules[i]->type != HKY_CORE_MODULE) {
+			continue;
+		}
+		module = cycle->modules[i]->ctx;
+
+		if (module->create_conf) {
+			rv = module->create_conf(cycle);
+			if (rv == NULL) {
+				hky_destroy_pool(pool);
+				return NULL;
+			}
+			cycle->conf_ctx[cycle->modules[i]->index] = rv;
+		}
+	}
+
+	senv = environ;
+
+	hky_memzero(&conf, sizeof(hky_conf_t));
+
+	conf.args = hky_array_create(pool, 10, sizeof(hky_str_t));
+	if (conf.args == NULL) {
+		hky_destory_pool(pool);
+		return NULL;
+	}
+
+	conf.temp_pool = hky_create_pool(HKY_CYCLE_POOL_SIZE, log);
+	if (conf.temp_pool == NULL) {
+		hky_destory_pool(pool);
+		return NULL;
+	}
+
+	conf.ctx = cycle->conf_ctx;
+	conf.cycle = cycle;
+	conf.pool = pool;
+	conf.log = log;
+	conf.module_type = HKY_CORE_MODULE;
+	conf.cmd_type = HKY_MAIN_CONF;
+
+#if 0
+	log->log_level = HKY_LOG_DEBUG_ALL;
+#endif // 0
+	if(hky_conf_param)
 }
 
 volatile hky_cycle_t  *hky_cycle;

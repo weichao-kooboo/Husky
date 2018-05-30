@@ -7,6 +7,12 @@
 #define HKY_CONF_OK          NULL
 #define HKY_CONF_ERROR       (void *) -1
 
+#define HKY_MAIN_CONF 0x01000000
+#define HKY_ANY_CONF 0x1F000000
+
+#define HKY_CORE_MODULE 0x45524F43
+#define HKY_CONF_MODULE 0x464E4F43
+
 struct hky_command_s{
 
 };
@@ -52,6 +58,9 @@ struct hky_open_file_s{
 };
 
 #define HKY_MAX_CONF_ERRSTR 1024
+
+char *hky_conf_param(hky_conf_t *cf);
+char *hky_conf_parse(hky_conf_t *cf, hky_str_t *filename);
 
 hky_int_t hky_conf_full_name(hky_cycle_t *cycle,hky_str_t *name,hky_uint_t conf_prefix);
 hky_open_file_t *hky_conf_open_file(hky_cycle_t *cycle, hky_str_t *name);

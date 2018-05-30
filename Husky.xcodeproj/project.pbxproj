@@ -1,0 +1,489 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		44D69C8E20BEE5A300B5C47E /* hky_array.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6620BEE5A300B5C47E /* hky_array.c */; };
+		44D69C8F20BEE5A300B5C47E /* hky_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6820BEE5A300B5C47E /* hky_buf.c */; };
+		44D69C9020BEE5A300B5C47E /* hky_conf_file.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6A20BEE5A300B5C47E /* hky_conf_file.c */; };
+		44D69C9120BEE5A300B5C47E /* hky_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6D20BEE5A300B5C47E /* hky_connection.c */; };
+		44D69C9220BEE5A300B5C47E /* hky_cycle.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7020BEE5A300B5C47E /* hky_cycle.c */; };
+		44D69C9320BEE5A300B5C47E /* hky_file.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7220BEE5A300B5C47E /* hky_file.c */; };
+		44D69C9420BEE5A300B5C47E /* hky_inet.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7420BEE5A300B5C47E /* hky_inet.c */; };
+		44D69C9520BEE5A300B5C47E /* hky_list.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7620BEE5A300B5C47E /* hky_list.c */; };
+		44D69C9620BEE5A300B5C47E /* hky_log.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7820BEE5A300B5C47E /* hky_log.c */; };
+		44D69C9720BEE5A300B5C47E /* hky_module.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7A20BEE5A300B5C47E /* hky_module.c */; };
+		44D69C9820BEE5A300B5C47E /* hky_palloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7C20BEE5A300B5C47E /* hky_palloc.c */; };
+		44D69C9920BEE5A300B5C47E /* hky_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C7E20BEE5A300B5C47E /* hky_parse.c */; };
+		44D69C9A20BEE5A300B5C47E /* hky_queue.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8020BEE5A300B5C47E /* hky_queue.c */; };
+		44D69C9B20BEE5A300B5C47E /* hky_rbtree.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8220BEE5A300B5C47E /* hky_rbtree.c */; };
+		44D69C9C20BEE5A300B5C47E /* hky_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8420BEE5A300B5C47E /* hky_string.c */; };
+		44D69C9D20BEE5A300B5C47E /* hky_syslog.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8820BEE5A300B5C47E /* hky_syslog.c */; };
+		44D69C9E20BEE5A300B5C47E /* hky_times.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8A20BEE5A300B5C47E /* hky_times.c */; };
+		44D69C9F20BEE5A300B5C47E /* husky.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C8C20BEE5A300B5C47E /* husky.c */; };
+		44D69CC720BEE5AE00B5C47E /* hky_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CA120BEE5AE00B5C47E /* hky_alloc.c */; };
+		44D69CC820BEE5AE00B5C47E /* hky_darwin_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CA520BEE5AE00B5C47E /* hky_darwin_init.c */; };
+		44D69CC920BEE5AE00B5C47E /* hky_errno.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CA620BEE5AE00B5C47E /* hky_errno.c */; };
+		44D69CCA20BEE5AE00B5C47E /* hky_files.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CA820BEE5AE00B5C47E /* hky_files.c */; };
+		44D69CCB20BEE5AE00B5C47E /* hky_freebsd_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CAB20BEE5AE00B5C47E /* hky_freebsd_init.c */; };
+		44D69CCC20BEE5AE00B5C47E /* hky_linux_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CB120BEE5AE00B5C47E /* hky_linux_init.c */; };
+		44D69CCD20BEE5AE00B5C47E /* hky_posix_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CB420BEE5AE00B5C47E /* hky_posix_init.c */; };
+		44D69CCE20BEE5AE00B5C47E /* hky_process.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CB520BEE5AE00B5C47E /* hky_process.c */; };
+		44D69CCF20BEE5AE00B5C47E /* hky_process_cycle.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CB720BEE5AE00B5C47E /* hky_process_cycle.c */; };
+		44D69CD020BEE5AE00B5C47E /* hky_setproctitle.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CB920BEE5AE00B5C47E /* hky_setproctitle.c */; };
+		44D69CD120BEE5AE00B5C47E /* hky_shmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CBB20BEE5AE00B5C47E /* hky_shmem.c */; };
+		44D69CD220BEE5AE00B5C47E /* hky_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CBD20BEE5AE00B5C47E /* hky_socket.c */; };
+		44D69CD320BEE5AE00B5C47E /* hky_solaris_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CC020BEE5AE00B5C47E /* hky_solaris_init.c */; };
+		44D69CD420BEE5AE00B5C47E /* hky_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CC120BEE5AE00B5C47E /* hky_thread.c */; };
+		44D69CD520BEE5AE00B5C47E /* hky_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69CC320BEE5AE00B5C47E /* hky_time.c */; };
+		44F4BCBB20BD9D6D00372DF9 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 44F4BCBA20BD9D6D00372DF9 /* main.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		44F4BCB520BD9D6D00372DF9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		44D69C6620BEE5A300B5C47E /* hky_array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_array.c; sourceTree = "<group>"; };
+		44D69C6720BEE5A300B5C47E /* hky_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_array.h; sourceTree = "<group>"; };
+		44D69C6820BEE5A300B5C47E /* hky_buf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_buf.c; sourceTree = "<group>"; };
+		44D69C6920BEE5A300B5C47E /* hky_buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_buf.h; sourceTree = "<group>"; };
+		44D69C6A20BEE5A300B5C47E /* hky_conf_file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_conf_file.c; sourceTree = "<group>"; };
+		44D69C6B20BEE5A300B5C47E /* hky_conf_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_conf_file.h; sourceTree = "<group>"; };
+		44D69C6C20BEE5A300B5C47E /* hky_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_config.h; sourceTree = "<group>"; };
+		44D69C6D20BEE5A300B5C47E /* hky_connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_connection.c; sourceTree = "<group>"; };
+		44D69C6E20BEE5A300B5C47E /* hky_connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_connection.h; sourceTree = "<group>"; };
+		44D69C6F20BEE5A300B5C47E /* hky_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_core.h; sourceTree = "<group>"; };
+		44D69C7020BEE5A300B5C47E /* hky_cycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_cycle.c; sourceTree = "<group>"; };
+		44D69C7120BEE5A300B5C47E /* hky_cycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_cycle.h; sourceTree = "<group>"; };
+		44D69C7220BEE5A300B5C47E /* hky_file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_file.c; sourceTree = "<group>"; };
+		44D69C7320BEE5A300B5C47E /* hky_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_file.h; sourceTree = "<group>"; };
+		44D69C7420BEE5A300B5C47E /* hky_inet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_inet.c; sourceTree = "<group>"; };
+		44D69C7520BEE5A300B5C47E /* hky_inet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_inet.h; sourceTree = "<group>"; };
+		44D69C7620BEE5A300B5C47E /* hky_list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_list.c; sourceTree = "<group>"; };
+		44D69C7720BEE5A300B5C47E /* hky_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_list.h; sourceTree = "<group>"; };
+		44D69C7820BEE5A300B5C47E /* hky_log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_log.c; sourceTree = "<group>"; };
+		44D69C7920BEE5A300B5C47E /* hky_log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_log.h; sourceTree = "<group>"; };
+		44D69C7A20BEE5A300B5C47E /* hky_module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_module.c; sourceTree = "<group>"; };
+		44D69C7B20BEE5A300B5C47E /* hky_module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_module.h; sourceTree = "<group>"; };
+		44D69C7C20BEE5A300B5C47E /* hky_palloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_palloc.c; sourceTree = "<group>"; };
+		44D69C7D20BEE5A300B5C47E /* hky_palloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_palloc.h; sourceTree = "<group>"; };
+		44D69C7E20BEE5A300B5C47E /* hky_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_parse.c; sourceTree = "<group>"; };
+		44D69C7F20BEE5A300B5C47E /* hky_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_parse.h; sourceTree = "<group>"; };
+		44D69C8020BEE5A300B5C47E /* hky_queue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_queue.c; sourceTree = "<group>"; };
+		44D69C8120BEE5A300B5C47E /* hky_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_queue.h; sourceTree = "<group>"; };
+		44D69C8220BEE5A300B5C47E /* hky_rbtree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_rbtree.c; sourceTree = "<group>"; };
+		44D69C8320BEE5A300B5C47E /* hky_rbtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_rbtree.h; sourceTree = "<group>"; };
+		44D69C8420BEE5A300B5C47E /* hky_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_string.c; sourceTree = "<group>"; };
+		44D69C8520BEE5A300B5C47E /* hky_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_string.h; sourceTree = "<group>"; };
+		44D69C8620BEE5A300B5C47E /* hky_sys_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_sys_config.h; sourceTree = "<group>"; };
+		44D69C8720BEE5A300B5C47E /* hky_sys_header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_sys_header.h; sourceTree = "<group>"; };
+		44D69C8820BEE5A300B5C47E /* hky_syslog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_syslog.c; sourceTree = "<group>"; };
+		44D69C8920BEE5A300B5C47E /* hky_syslog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_syslog.h; sourceTree = "<group>"; };
+		44D69C8A20BEE5A300B5C47E /* hky_times.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_times.c; sourceTree = "<group>"; };
+		44D69C8B20BEE5A300B5C47E /* hky_times.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_times.h; sourceTree = "<group>"; };
+		44D69C8C20BEE5A300B5C47E /* husky.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = husky.c; sourceTree = "<group>"; };
+		44D69C8D20BEE5A300B5C47E /* husky.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = husky.h; sourceTree = "<group>"; };
+		44D69CA120BEE5AE00B5C47E /* hky_alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_alloc.c; sourceTree = "<group>"; };
+		44D69CA220BEE5AE00B5C47E /* hky_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_alloc.h; sourceTree = "<group>"; };
+		44D69CA320BEE5AE00B5C47E /* hky_atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_atomic.h; sourceTree = "<group>"; };
+		44D69CA420BEE5AE00B5C47E /* hky_darwin_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_darwin_config.h; sourceTree = "<group>"; };
+		44D69CA520BEE5AE00B5C47E /* hky_darwin_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_darwin_init.c; sourceTree = "<group>"; };
+		44D69CA620BEE5AE00B5C47E /* hky_errno.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_errno.c; sourceTree = "<group>"; };
+		44D69CA720BEE5AE00B5C47E /* hky_errno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_errno.h; sourceTree = "<group>"; };
+		44D69CA820BEE5AE00B5C47E /* hky_files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_files.c; sourceTree = "<group>"; };
+		44D69CA920BEE5AE00B5C47E /* hky_files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_files.h; sourceTree = "<group>"; };
+		44D69CAA20BEE5AE00B5C47E /* hky_freebsd_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_freebsd_config.h; sourceTree = "<group>"; };
+		44D69CAB20BEE5AE00B5C47E /* hky_freebsd_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_freebsd_init.c; sourceTree = "<group>"; };
+		44D69CAC20BEE5AE00B5C47E /* hky_gcc_atomic_amd64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_gcc_atomic_amd64.h; sourceTree = "<group>"; };
+		44D69CAD20BEE5AE00B5C47E /* hky_gcc_atomic_ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_gcc_atomic_ppc.h; sourceTree = "<group>"; };
+		44D69CAE20BEE5AE00B5C47E /* hky_gcc_atomic_sparc64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_gcc_atomic_sparc64.h; sourceTree = "<group>"; };
+		44D69CAF20BEE5AE00B5C47E /* hky_gcc_atomic_x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_gcc_atomic_x86.h; sourceTree = "<group>"; };
+		44D69CB020BEE5AE00B5C47E /* hky_linux_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_linux_config.h; sourceTree = "<group>"; };
+		44D69CB120BEE5AE00B5C47E /* hky_linux_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_linux_init.c; sourceTree = "<group>"; };
+		44D69CB220BEE5AE00B5C47E /* hky_os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_os.h; sourceTree = "<group>"; };
+		44D69CB320BEE5AE00B5C47E /* hky_posix_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_posix_config.h; sourceTree = "<group>"; };
+		44D69CB420BEE5AE00B5C47E /* hky_posix_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_posix_init.c; sourceTree = "<group>"; };
+		44D69CB520BEE5AE00B5C47E /* hky_process.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_process.c; sourceTree = "<group>"; };
+		44D69CB620BEE5AE00B5C47E /* hky_process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_process.h; sourceTree = "<group>"; };
+		44D69CB720BEE5AE00B5C47E /* hky_process_cycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_process_cycle.c; sourceTree = "<group>"; };
+		44D69CB820BEE5AE00B5C47E /* hky_process_cycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_process_cycle.h; sourceTree = "<group>"; };
+		44D69CB920BEE5AE00B5C47E /* hky_setproctitle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_setproctitle.c; sourceTree = "<group>"; };
+		44D69CBA20BEE5AE00B5C47E /* hky_setproctitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_setproctitle.h; sourceTree = "<group>"; };
+		44D69CBB20BEE5AE00B5C47E /* hky_shmem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_shmem.c; sourceTree = "<group>"; };
+		44D69CBC20BEE5AE00B5C47E /* hky_shmem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_shmem.h; sourceTree = "<group>"; };
+		44D69CBD20BEE5AE00B5C47E /* hky_socket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_socket.c; sourceTree = "<group>"; };
+		44D69CBE20BEE5AE00B5C47E /* hky_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_socket.h; sourceTree = "<group>"; };
+		44D69CBF20BEE5AE00B5C47E /* hky_solaris_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_solaris_config.h; sourceTree = "<group>"; };
+		44D69CC020BEE5AE00B5C47E /* hky_solaris_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_solaris_init.c; sourceTree = "<group>"; };
+		44D69CC120BEE5AE00B5C47E /* hky_thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_thread.c; sourceTree = "<group>"; };
+		44D69CC220BEE5AE00B5C47E /* hky_thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_thread.h; sourceTree = "<group>"; };
+		44D69CC320BEE5AE00B5C47E /* hky_time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_time.c; sourceTree = "<group>"; };
+		44D69CC420BEE5AE00B5C47E /* hky_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_time.h; sourceTree = "<group>"; };
+		44D69CC620BEE5AE00B5C47E /* hky_win32_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_win32_config.h; sourceTree = "<group>"; };
+		44F4BCB720BD9D6D00372DF9 /* Husky */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Husky; sourceTree = BUILT_PRODUCTS_DIR; };
+		44F4BCBA20BD9D6D00372DF9 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		44F4BCB420BD9D6D00372DF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		44D69C6520BEE5A300B5C47E /* core */ = {
+			isa = PBXGroup;
+			children = (
+				44D69C6620BEE5A300B5C47E /* hky_array.c */,
+				44D69C6720BEE5A300B5C47E /* hky_array.h */,
+				44D69C6820BEE5A300B5C47E /* hky_buf.c */,
+				44D69C6920BEE5A300B5C47E /* hky_buf.h */,
+				44D69C6A20BEE5A300B5C47E /* hky_conf_file.c */,
+				44D69C6B20BEE5A300B5C47E /* hky_conf_file.h */,
+				44D69C6C20BEE5A300B5C47E /* hky_config.h */,
+				44D69C6D20BEE5A300B5C47E /* hky_connection.c */,
+				44D69C6E20BEE5A300B5C47E /* hky_connection.h */,
+				44D69C6F20BEE5A300B5C47E /* hky_core.h */,
+				44D69C7020BEE5A300B5C47E /* hky_cycle.c */,
+				44D69C7120BEE5A300B5C47E /* hky_cycle.h */,
+				44D69C7220BEE5A300B5C47E /* hky_file.c */,
+				44D69C7320BEE5A300B5C47E /* hky_file.h */,
+				44D69C7420BEE5A300B5C47E /* hky_inet.c */,
+				44D69C7520BEE5A300B5C47E /* hky_inet.h */,
+				44D69C7620BEE5A300B5C47E /* hky_list.c */,
+				44D69C7720BEE5A300B5C47E /* hky_list.h */,
+				44D69C7820BEE5A300B5C47E /* hky_log.c */,
+				44D69C7920BEE5A300B5C47E /* hky_log.h */,
+				44D69C7A20BEE5A300B5C47E /* hky_module.c */,
+				44D69C7B20BEE5A300B5C47E /* hky_module.h */,
+				44D69C7C20BEE5A300B5C47E /* hky_palloc.c */,
+				44D69C7D20BEE5A300B5C47E /* hky_palloc.h */,
+				44D69C7E20BEE5A300B5C47E /* hky_parse.c */,
+				44D69C7F20BEE5A300B5C47E /* hky_parse.h */,
+				44D69C8020BEE5A300B5C47E /* hky_queue.c */,
+				44D69C8120BEE5A300B5C47E /* hky_queue.h */,
+				44D69C8220BEE5A300B5C47E /* hky_rbtree.c */,
+				44D69C8320BEE5A300B5C47E /* hky_rbtree.h */,
+				44D69C8420BEE5A300B5C47E /* hky_string.c */,
+				44D69C8520BEE5A300B5C47E /* hky_string.h */,
+				44D69C8620BEE5A300B5C47E /* hky_sys_config.h */,
+				44D69C8720BEE5A300B5C47E /* hky_sys_header.h */,
+				44D69C8820BEE5A300B5C47E /* hky_syslog.c */,
+				44D69C8920BEE5A300B5C47E /* hky_syslog.h */,
+				44D69C8A20BEE5A300B5C47E /* hky_times.c */,
+				44D69C8B20BEE5A300B5C47E /* hky_times.h */,
+				44D69C8C20BEE5A300B5C47E /* husky.c */,
+				44D69C8D20BEE5A300B5C47E /* husky.h */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		44D69CA020BEE5AE00B5C47E /* unix */ = {
+			isa = PBXGroup;
+			children = (
+				44D69CA120BEE5AE00B5C47E /* hky_alloc.c */,
+				44D69CA220BEE5AE00B5C47E /* hky_alloc.h */,
+				44D69CA320BEE5AE00B5C47E /* hky_atomic.h */,
+				44D69CA420BEE5AE00B5C47E /* hky_darwin_config.h */,
+				44D69CA520BEE5AE00B5C47E /* hky_darwin_init.c */,
+				44D69CA620BEE5AE00B5C47E /* hky_errno.c */,
+				44D69CA720BEE5AE00B5C47E /* hky_errno.h */,
+				44D69CA820BEE5AE00B5C47E /* hky_files.c */,
+				44D69CA920BEE5AE00B5C47E /* hky_files.h */,
+				44D69CAA20BEE5AE00B5C47E /* hky_freebsd_config.h */,
+				44D69CAB20BEE5AE00B5C47E /* hky_freebsd_init.c */,
+				44D69CAC20BEE5AE00B5C47E /* hky_gcc_atomic_amd64.h */,
+				44D69CAD20BEE5AE00B5C47E /* hky_gcc_atomic_ppc.h */,
+				44D69CAE20BEE5AE00B5C47E /* hky_gcc_atomic_sparc64.h */,
+				44D69CAF20BEE5AE00B5C47E /* hky_gcc_atomic_x86.h */,
+				44D69CB020BEE5AE00B5C47E /* hky_linux_config.h */,
+				44D69CB120BEE5AE00B5C47E /* hky_linux_init.c */,
+				44D69CB220BEE5AE00B5C47E /* hky_os.h */,
+				44D69CB320BEE5AE00B5C47E /* hky_posix_config.h */,
+				44D69CB420BEE5AE00B5C47E /* hky_posix_init.c */,
+				44D69CB520BEE5AE00B5C47E /* hky_process.c */,
+				44D69CB620BEE5AE00B5C47E /* hky_process.h */,
+				44D69CB720BEE5AE00B5C47E /* hky_process_cycle.c */,
+				44D69CB820BEE5AE00B5C47E /* hky_process_cycle.h */,
+				44D69CB920BEE5AE00B5C47E /* hky_setproctitle.c */,
+				44D69CBA20BEE5AE00B5C47E /* hky_setproctitle.h */,
+				44D69CBB20BEE5AE00B5C47E /* hky_shmem.c */,
+				44D69CBC20BEE5AE00B5C47E /* hky_shmem.h */,
+				44D69CBD20BEE5AE00B5C47E /* hky_socket.c */,
+				44D69CBE20BEE5AE00B5C47E /* hky_socket.h */,
+				44D69CBF20BEE5AE00B5C47E /* hky_solaris_config.h */,
+				44D69CC020BEE5AE00B5C47E /* hky_solaris_init.c */,
+				44D69CC120BEE5AE00B5C47E /* hky_thread.c */,
+				44D69CC220BEE5AE00B5C47E /* hky_thread.h */,
+				44D69CC320BEE5AE00B5C47E /* hky_time.c */,
+				44D69CC420BEE5AE00B5C47E /* hky_time.h */,
+			);
+			path = unix;
+			sourceTree = "<group>";
+		};
+		44D69CC520BEE5AE00B5C47E /* win32 */ = {
+			isa = PBXGroup;
+			children = (
+				44D69CC620BEE5AE00B5C47E /* hky_win32_config.h */,
+			);
+			path = win32;
+			sourceTree = "<group>";
+		};
+		44F4BCAE20BD9D6D00372DF9 = {
+			isa = PBXGroup;
+			children = (
+				44D69CA020BEE5AE00B5C47E /* unix */,
+				44D69CC520BEE5AE00B5C47E /* win32 */,
+				44D69C6520BEE5A300B5C47E /* core */,
+				44F4BCB920BD9D6D00372DF9 /* Husky */,
+				44F4BCB820BD9D6D00372DF9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		44F4BCB820BD9D6D00372DF9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				44F4BCB720BD9D6D00372DF9 /* Husky */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		44F4BCB920BD9D6D00372DF9 /* Husky */ = {
+			isa = PBXGroup;
+			children = (
+				44F4BCBA20BD9D6D00372DF9 /* main.c */,
+			);
+			path = Husky;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		44F4BCB620BD9D6D00372DF9 /* Husky */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44F4BCBE20BD9D6D00372DF9 /* Build configuration list for PBXNativeTarget "Husky" */;
+			buildPhases = (
+				44F4BCB320BD9D6D00372DF9 /* Sources */,
+				44F4BCB420BD9D6D00372DF9 /* Frameworks */,
+				44F4BCB520BD9D6D00372DF9 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Husky;
+			productName = Husky;
+			productReference = 44F4BCB720BD9D6D00372DF9 /* Husky */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		44F4BCAF20BD9D6D00372DF9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = weichao;
+				TargetAttributes = {
+					44F4BCB620BD9D6D00372DF9 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 44F4BCB220BD9D6D00372DF9 /* Build configuration list for PBXProject "Husky" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 44F4BCAE20BD9D6D00372DF9;
+			productRefGroup = 44F4BCB820BD9D6D00372DF9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				44F4BCB620BD9D6D00372DF9 /* Husky */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		44F4BCB320BD9D6D00372DF9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44D69C9A20BEE5A300B5C47E /* hky_queue.c in Sources */,
+				44D69CD120BEE5AE00B5C47E /* hky_shmem.c in Sources */,
+				44D69C9120BEE5A300B5C47E /* hky_connection.c in Sources */,
+				44D69C9220BEE5A300B5C47E /* hky_cycle.c in Sources */,
+				44D69C9020BEE5A300B5C47E /* hky_conf_file.c in Sources */,
+				44D69C8E20BEE5A300B5C47E /* hky_array.c in Sources */,
+				44D69CCF20BEE5AE00B5C47E /* hky_process_cycle.c in Sources */,
+				44D69C9320BEE5A300B5C47E /* hky_file.c in Sources */,
+				44D69CCD20BEE5AE00B5C47E /* hky_posix_init.c in Sources */,
+				44D69CC720BEE5AE00B5C47E /* hky_alloc.c in Sources */,
+				44D69CCA20BEE5AE00B5C47E /* hky_files.c in Sources */,
+				44D69C8F20BEE5A300B5C47E /* hky_buf.c in Sources */,
+				44D69CCE20BEE5AE00B5C47E /* hky_process.c in Sources */,
+				44D69C9E20BEE5A300B5C47E /* hky_times.c in Sources */,
+				44D69C9D20BEE5A300B5C47E /* hky_syslog.c in Sources */,
+				44D69CD520BEE5AE00B5C47E /* hky_time.c in Sources */,
+				44D69C9420BEE5A300B5C47E /* hky_inet.c in Sources */,
+				44D69CCB20BEE5AE00B5C47E /* hky_freebsd_init.c in Sources */,
+				44D69CD020BEE5AE00B5C47E /* hky_setproctitle.c in Sources */,
+				44F4BCBB20BD9D6D00372DF9 /* main.c in Sources */,
+				44D69C9520BEE5A300B5C47E /* hky_list.c in Sources */,
+				44D69C9F20BEE5A300B5C47E /* husky.c in Sources */,
+				44D69CC820BEE5AE00B5C47E /* hky_darwin_init.c in Sources */,
+				44D69C9620BEE5A300B5C47E /* hky_log.c in Sources */,
+				44D69C9B20BEE5A300B5C47E /* hky_rbtree.c in Sources */,
+				44D69CC920BEE5AE00B5C47E /* hky_errno.c in Sources */,
+				44D69CCC20BEE5AE00B5C47E /* hky_linux_init.c in Sources */,
+				44D69C9720BEE5A300B5C47E /* hky_module.c in Sources */,
+				44D69C9820BEE5A300B5C47E /* hky_palloc.c in Sources */,
+				44D69CD220BEE5AE00B5C47E /* hky_socket.c in Sources */,
+				44D69C9920BEE5A300B5C47E /* hky_parse.c in Sources */,
+				44D69CD320BEE5AE00B5C47E /* hky_solaris_init.c in Sources */,
+				44D69CD420BEE5AE00B5C47E /* hky_thread.c in Sources */,
+				44D69C9C20BEE5A300B5C47E /* hky_string.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		44F4BCBC20BD9D6D00372DF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		44F4BCBD20BD9D6D00372DF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		44F4BCBF20BD9D6D00372DF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		44F4BCC020BD9D6D00372DF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		44F4BCB220BD9D6D00372DF9 /* Build configuration list for PBXProject "Husky" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44F4BCBC20BD9D6D00372DF9 /* Debug */,
+				44F4BCBD20BD9D6D00372DF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44F4BCBE20BD9D6D00372DF9 /* Build configuration list for PBXNativeTarget "Husky" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44F4BCBF20BD9D6D00372DF9 /* Debug */,
+				44F4BCC020BD9D6D00372DF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 44F4BCAF20BD9D6D00372DF9 /* Project object */;
+}

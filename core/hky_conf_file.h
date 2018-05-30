@@ -19,6 +19,7 @@ struct hky_command_s{
 
 typedef struct {
     hky_file_t file;
+    //保存启动时输入的-g参数
     hky_buf_t *buffer;
     hky_buf_t *dump;
     hky_uint_t line;
@@ -59,7 +60,9 @@ struct hky_open_file_s{
 
 #define HKY_MAX_CONF_ERRSTR 1024
 
+//初始化参数
 char *hky_conf_param(hky_conf_t *cf);
+//解析配置文件
 char *hky_conf_parse(hky_conf_t *cf, hky_str_t *filename);
 
 hky_int_t hky_conf_full_name(hky_cycle_t *cycle,hky_str_t *name,hky_uint_t conf_prefix);

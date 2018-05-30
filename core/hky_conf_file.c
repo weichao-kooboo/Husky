@@ -117,8 +117,40 @@ hky_conf_param(hky_conf_t *cf) {
 	conf_file.file.fd = HKY_INVALID_FILE;
 	conf_file.file.name.data = NULL;
 	conf_file.line = 0;
+    
+    cf->conf_file=&conf_file;
+    cf->conf_file->buffer=&b;
+    
+    rv=hky_conf_parse(cf, NULL);
+    cf->conf_file=NULL;
+    return rv;
 }
 char *
 hky_conf_parse(hky_conf_t *cf, hky_str_t *filename) {
-
+    char *rv;
+    hky_fd_t fd;
+    hky_int_t rc;
+    hky_buf_t buf;
+    hky_conf_file_t *prev,conf_file;
+    enum{
+        parse_file=0,
+        parse_block,
+        parse_param
+    }type;
+    
+#if (HKY_SUPPRESS_WARN)
+    fd=HKY_INVALID_FILE;
+    prev=NULL;
+#endif
+    if (filename) {
+        fd=hky_open_file(filename->data, HKY_FILE_RDONLY, HKY_FILE_OPEN, 0);
+        if (fd==HKY_INVALID_FILE) {
+            hky_conf_log_error(HKY_LOG_EMERG, cf, hky_errno,
+                               hky_open_file_n " \"%s\" failed",filename->data);
+            return HKY_CONF_ERROR;
+        }
+        prev=cf->conf_file;
+        cf->conf_file=&conf_file;
+        
+    }
 }

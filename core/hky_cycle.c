@@ -204,7 +204,8 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 #if 0
 	log->log_level = HKY_LOG_DEBUG_ALL;
 #endif // 0
-	if(hky_conf_param)
+    
+    return NULL;
 }
 
 volatile hky_cycle_t  *hky_cycle;

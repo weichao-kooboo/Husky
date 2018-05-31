@@ -4,6 +4,8 @@
 
 #define HKY_CONF_BUFFER 4096
 
+static hky_int_t hky_conf_add_dump(hky_conf_t *cf,hky_str_t *filename);
+
 hky_open_file_t *
 hky_conf_open_file(hky_cycle_t *cycle, hky_str_t *name){
     hky_str_t full;
@@ -152,5 +154,99 @@ hky_conf_parse(hky_conf_t *cf, hky_str_t *filename) {
         prev=cf->conf_file;
         cf->conf_file=&conf_file;
         
+        if (hky_fd_info(fd, &cf->conf_file->file.info)==HKY_FILE_ERROR) {
+            hky_log_error(HKY_LOG_EMERG, cf->log, hky_errno,
+                          hky_fd_info_n " \"%s\" failed",filename->data);
+        }
+        
+        cf->conf_file->buffer=&buf;
+        buf.start=hky_alloc(HKY_CONF_BUFFER, cf->log);
+        if (buf.start==NULL) {
+            goto failed;
+        }
+        buf.pos=buf.start;
+        buf.last=buf.start;
+        buf.end=buf.last+HKY_CONF_BUFFER;
+        buf.temporary=1;
+        
+        cf->conf_file->file.fd  =fd;
+        cf->conf_file->file.name.len=filename->len;
+        cf->conf_file->file.name.data=filename->data;
+        cf->conf_file->file.offset=0;
+        cf->conf_file->file.log=cf->log;
+        cf->conf_file->line=1;
+        
+        type=parse_file;
+        
+        if (hky_dump_config
+#if (HKY_DEBUG)
+            || 1
+#endif
+            ) {
+            if (hky_conf_add_dump(cf, filename)!=HKY_OK) {
+                goto failed;
+            }
+        }else{
+            cf->conf_file->dump=NULL;
+        }
+    }else if(cf->conf_file->file.fd!=HKY_INVALID_FILE){
+        type=parse_block;
+    }else{
+        type=parse_param;
     }
+    
+}
+
+static hky_int_t
+hky_conf_add_dump(hky_conf_t *cf,hky_str_t *filename){
+    off_t size;
+    hky_uchar   *p;
+    uint32_t hash;
+    hky_buf_t   *buf;
+    hky_str_node_t  *sn;
+    hky_conf_dump_t *cd;
+    
+    hash=hky_crc32_long(filename->data, filename->len);
+    
+    sn=hky_str_rbtree_lookup(&cf->cycle->config_dump_rbtree, filename, hash);
+    
+    if (sn) {
+        cf->conf_file->dump=NULL;
+        return HKY_OK;
+    }
+    
+    p=hky_pstrdup(cf->cycle->pool, filename);
+    if (NULL==p) {
+        return HKY_ERROR;
+    }
+    
+    cf=hky_array_push(&cf->cycle->config_dump);
+    if (NULL==cd) {
+        return HKY_ERROR;
+    }
+    
+    size=hky_file_size(&cf->conf_file->file.info);
+    
+    buf=hky_create_temp_buf(cf->cycle->pool, (size_t)size);
+    if (NULL==buf) {
+        return HKY_ERROR;
+    }
+    
+    cd->name.data=p;
+    cd->name.len=filename->len;
+    cd->buffer=buf;
+    
+    cf->conf_file->dump=buf;
+    
+    sn=hky_palloc(cf->temp_pool, sizeof(hky_str_node_t));
+    
+    if (NULL==sn) {
+        return HKY_ERROR;
+    }
+    sn->node.key=hash;
+    sn->str=cd->name;
+    
+    hky_rbtree_insert(&cf->cycle->config_dump_rbtree, &sn->node);
+    
+    return HKY_OK;
 }

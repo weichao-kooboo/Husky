@@ -2,6 +2,7 @@
 #define HKY_FILES_H_INCLUDED
 
 typedef int                      hky_fd_t;
+typedef struct stat              hky_file_info_t;
 
 #define HKY_INVALID_FILE -1
 #define HKY_FILE_ERROR -1
@@ -67,6 +68,14 @@ static hky_inline ssize_t
 hky_write_fd(hky_fd_t fd,void *buf,size_t n){
     return write(fd,buf,n);
 }
+
+#define hky_file_info(file,sb)  stat((const char*)file,sb)
+#define hky_file_info_n "stat()"
+
+#define hky_fd_info(fd,sb)  fstat(fd,sb)
+#define hky_fd_info_n   "fstat()"
+
+#define hky_file_size(sb)   (sb)->st_size
 
 #define hky_realpath(p, r)       (u_char *) realpath((char *) p, (char *) r)
 #define hky_realpath_n           "realpath()"

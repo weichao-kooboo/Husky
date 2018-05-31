@@ -7,6 +7,11 @@
 struct hky_file_s{
     hky_fd_t fd;
     hky_str_t name;
+    hky_file_info_t info;
+    
+    off_t offset;
+    
+    hky_log_t   *log;
 };
 
 #define HKY_MAX_PATH_LEVEL 3

@@ -41,4 +41,9 @@ struct hky_chain_s{
     hky_chain_t *next;
 };
 
+hky_buf_t *hky_create_temp_buf(hky_pool_t *pool,size_t size);
+
+#define hky_alloc_buf(pool) hky_palloc(pool,sizeof(hky_buf_t))
+#define hky_calloc_buf(pool) hky_pcalloc(pool,sizeof(hky_buf_t))
+
 #endif // HKY_BUF_H_INCLUDED

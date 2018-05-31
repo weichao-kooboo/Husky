@@ -51,6 +51,7 @@ typedef struct hky_connection_s hky_connection_t;
 #include "hky_list.h"
 #include "hky_cycle.h"
 #include "hky_file.h"
+#include "hky_crc32.h"
 
 #include "hky_inet.h"
 

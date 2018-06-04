@@ -64,6 +64,15 @@ typedef struct stat              hky_file_info_t;
 #define hky_delete_file(name)   unlink((const char*)name)
 #define hky_delete_file_n   "unlink()"
 
+ssize_t
+hky_read_file(hky_file_t *file, hky_uchar *buf, size_t size, off_t offset);
+#if (HKY_HAVE_PREAD)
+#define hky_read_file_n	"pread()"
+#else
+#define hky_read_file_n	"read()"
+#endif // (HKY_HAVE_PREAD)
+
+
 static hky_inline ssize_t
 hky_write_fd(hky_fd_t fd,void *buf,size_t n){
     return write(fd,buf,n);

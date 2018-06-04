@@ -5,6 +5,7 @@
 #define HKY_CONF_BUFFER 4096
 
 static hky_int_t hky_conf_add_dump(hky_conf_t *cf,hky_str_t *filename);
+static hky_int_t hky_conf_read_token(hky_conf_t *cf);
 
 hky_open_file_t *
 hky_conf_open_file(hky_cycle_t *cycle, hky_str_t *name){
@@ -195,6 +196,97 @@ hky_conf_parse(hky_conf_t *cf, hky_str_t *filename) {
         type=parse_param;
     }
     
+}
+
+
+static hky_int_t 
+hky_conf_read_token(hky_conf_t *cf) {
+	hky_uchar *start, ch, *src, *dst;
+	off_t file_size;
+	size_t len;
+	ssize_t n, size;
+	hky_uint_t found, need_space, last_space, sharp_comment, variable;
+	hky_uint_t quoted, s_quoted, d_quoted, start_line;
+	hky_str_t *word;
+	hky_buf_t *b, *dump;
+
+	found = 0;
+	need_space = 0;
+	last_space = 1;
+	sharp_comment = 0;
+	variable = 0;
+	quoted = 0;
+	s_quoted = 0;
+	d_quoted = 0;
+
+	cf->args->nelts = 0;
+	b = cf->conf_file->buffer;
+	dump = cf->conf_file->dump;
+	start = b->pos;
+	start_line = cf->conf_file->line;
+
+	file_size = hky_file_size(&cf->conf_file->file.info);
+
+	for (;;)
+	{
+		if (b->pos >= b->last) {
+			if (cf->conf_file->file.offset >= file_size) {
+				if (cf->args->nelts > 0 || !last_space) {
+					if (cf->conf_file->file.fd == HKY_INVALID_FILE) {
+						hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+							"unexpected end of parameter, "
+							"expecting \";\"");
+						return HKY_ERROR;
+					}
+					hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+						"unexpected end of file, "
+						"expecting \";\" or \"}\"");
+					return HKY_ERROR;
+				}
+				return HKY_CONF_FILE_DONE;
+			}
+
+			len = b->pos - start;
+
+			if (len == HKY_CONF_BUFFER) {
+				cf->conf_file->line = start_line;
+
+				if (d_quoted) {
+					ch = '"';
+				}
+				else if (s_quoted) {
+					ch = '\'';
+				}
+				else {
+					hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+						"too long parameter \"%*s...\" started",
+						10, start);
+					return HKY_ERROR;
+				}
+
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"too long parameter, probably"
+					"missing terminating \"%c\" character", ch);
+				return HKY_ERROR;
+			}
+
+			if (len) {
+				hky_memmove(b->start, start, len);
+			}
+
+			size = (ssize_t)(file_size - cf->conf_file->file.offset);
+
+			if (size > b->end - (b->start + len)) {
+				size = b->end - (b->start + len);
+			}
+
+			n = hky_read_file(&cf->conf_file->file, b->start + len, size, cf->conf_file->file.offset);
+
+			if (n == HKY_ERROR) {
+				return HKY_ERROR;
+			}
+		}
+	}
 }
 
 static hky_int_t

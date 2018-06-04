@@ -10,6 +10,7 @@ struct hky_file_s{
     hky_file_info_t info;
     
     off_t offset;
+	off_t sys_offset;
     
     hky_log_t   *log;
 };

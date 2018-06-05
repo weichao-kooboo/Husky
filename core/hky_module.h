@@ -6,10 +6,12 @@
 #include "husky.h"
 
 struct hky_module_s{
+	hky_uint_t	ctx_index;
 	//标记模块的索引
 	hky_uint_t index;
 	//模块上下文
 	void *ctx;
+	hky_command_t	*commands;
 	//模块类型,用于过滤模块
 	hky_uint_t type;
 };

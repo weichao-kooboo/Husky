@@ -12,4 +12,7 @@ typedef struct {
 	hky_uint_t exists;
 } hky_shm_t;
 
+hky_int_t hky_shm_alloc(hky_shm_t *shm);
+void hky_shm_free(hky_shm_t *shm);
+
 #endif // !HKY_SHMEM_H_INCLUDED

@@ -37,6 +37,7 @@ typedef struct hky_connection_s hky_connection_t;
 #include "../unix/hky_time.h"
 #include "../unix/hky_socket.h"
 #include "../unix/hky_process.h"
+#include "../unix/hky_user.h"
 #include "../unix/hky_process_cycle.h"
 #include "hky_string.h"
 #include "../unix/hky_shmem.h"
@@ -54,6 +55,7 @@ typedef struct hky_connection_s hky_connection_t;
 #include "hky_crc32.h"
 
 #include "hky_inet.h"
+#include "hky_slab.h"
 
 #include "hky_conf_file.h"
 #include "hky_module.h"

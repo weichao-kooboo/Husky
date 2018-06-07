@@ -2,6 +2,10 @@
 #include "hky_config.h"
 #include "hky_core.h"
 
+static void hky_destroy_cycle_pools(hky_conf_t *conf);
+static hky_int_t hky_test_lockfile(hky_uchar *file, hky_log_t *log);
+static hky_int_t hky_init_zone_pool(hky_cycle_t *cycle, hky_shm_zone_t *shm_zone);
+
 hky_cycle_t *
 hky_init_cycle(hky_cycle_t *old_cycle) {
 	void *rv;
@@ -204,8 +208,296 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 #if 0
 	log->log_level = HKY_LOG_DEBUG_ALL;
 #endif // 0
+
+	if (hky_conf_param(&conf) != HKY_CONF_OK) {
+		environ = senv;
+		hky_destroy_cycle_pools(&conf);
+		return NULL;
+	}
+	if (hky_conf_parse(&conf, &cycle->conf_file) != HKY_CONF_OK) {
+		environ = senv;
+		hky_destroy_cycle_pools(&conf);
+		return NULL;
+	}
+	if (hky_test_config && !hky_quiet_mode) {
+		hky_log_stderr(0, "the configuration file %s syntax is ok",
+			cycle->conf_file.data);
+	}
+	for (i = 0; cycle->modules[i]; i++)
+	{
+		if (cycle->modules[i]->type != HKY_CORE_MODULE) {
+			continue;
+		}
+		module = cycle->modules[i]->ctx;
+		if (module->init_conf) {
+			if (module->init_conf(cycle, cycle->conf_ctx[cycle->modules[i]->index]) == HKY_CONF_ERROR) {
+				environ = senv;
+				hky_destroy_cycle_pools(&conf);
+				return NULL;
+			}
+		}
+	}
+	if (hky_process == HKY_PROCESS_SIGNALLER) {
+		return cycle;
+	}
+
+	ccf = (hky_core_conf_t *)hky_get_conf(cycle->conf_ctx, hky_core_module);
+
+	if (hky_test_config) {
+		if (hky_create_pidfile(&ccf->pid, log) != HKY_OK) {
+			goto failed;
+		}
+	}
+	else if (!hky_is_init_cycle(old_cycle)) {
+		old_ccf = (hky_core_conf_t *)hky_get_conf(old_cycle->conf_ctx, hky_core_module);
+
+		if (ccf->pid.len != old_ccf->pid.len
+			|| hky_strcmp(ccf->pid.data, old_ccf->pid.data) != 0) {
+			if (hky_create_pidfile(&ccf->pid, log) != HKY_OK) {
+				goto failed;
+			}
+			hky_delete_pidfile(old_cycle);
+		}
+	}
+	
+	if (hky_test_lockfile(cycle->lock_file.data, log) != HKY_OK) {
+		goto failed;
+	}
+
+	if (hky_create_paths(cycle, ccf->user) != HKY_OK) {
+		goto failed;
+	}
+
+	if (hky_log_open_default(cycle) != HKY_OK) {
+		goto failed;
+	}
+
+	part = &cycle->open_files.part;
+	file = part->elts;
+
+	for (i = 0; ; i++) {
+		if (i >= part->nelts) {
+			if (part->next == NULL) {
+				break;
+			}
+			part = part->next;
+			file = part->elts;
+			i = 0;
+		}
+		if (file[i].name.len == 0) {
+			continue;
+		}
+		file[i].fd = hky_open_file(file[i].name.data,
+			HKY_FILE_APPEND,
+			HKY_FILE_CREATE_OR_OPEN,
+			HKY_FILE_DEFAULT_ACCESS);
+		hky_log_debug3(HKY_LOG_DEBUG_CORE, log, 0,
+			"log: %p %d \"%s\"",
+			&file[i], file[i].fd, file[i].name.data);
+
+		if (file[i].fd == HKY_INVALID_FILE) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+				hky_open_file_n " \"%s\" failed",
+				file[i].name.data);
+			goto failed;
+		}
+#if !(HKY_WIN32)
+		if (fcntl(file[i].fd, F_SETFD, FD_CLOEXEC) == -1) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+				"fcntl(FD_CLOEXEC) \"%s\" failed",
+				file[i].name.data);
+			goto failed;
+		}
+#endif // !(HKY_WIN32)
+	}
+	cycle->log = &cycle->new_log;
+	pool->log = &cycle->new_log;
+
+	part = &cycle->shared_memory.part;
+	shm_zone = part->elts;
+
+	for (i = 0;; i++) {
+		if (i >= part->nelts) {
+			if (part->next == NULL) {
+				break;
+			}
+			part = part->next;
+			shm_zone = part->elts;
+			i = 0;
+		}
+
+		if (shm_zone[i].shm.size == 0) {
+			hky_log_error(HKY_LOG_EMERG, log, 0,
+				"zero size shared memory zone \"%V\"",
+				&shm_zone[i].shm.name);
+			goto failed;
+		}
+		shm_zone[i].shm.log = cycle->log;
+
+		opart = &old_cycle->shared_memory.part;
+		oshm_zone = opart->elts;
+
+		for (n = 0;; n++)
+		{
+			if (n >= opart->nelts) {
+				if (opart->next == NULL) {
+					break;
+				}
+				opart = opart->next;
+				oshm_zone = opart->elts;
+				n = 0;
+			}
+
+			if (shm_zone[i].shm.name.len != oshm_zone[n].shm.name.len) {
+				continue;
+			}
+
+			if (hky_strncmp(shm_zone[i].shm.name.data,
+				oshm_zone[n].shm.name.data,
+				shm_zone[i].shm.name.len)
+				!= 0) {
+				continue;
+			}
+
+			if (shm_zone[i].tag == oshm_zone[n].tag
+				&&shm_zone[i].shm.size == oshm_zone[n].shm.size
+				&& !shm_zone[i].noreuse) {
+				shm_zone[i].shm.addr = oshm_zone[n].shm.addr;
+#if (HKY_WIN32)
+				shm_zone[i].shm.handle = oshm_zone[n].shm.handle;
+#endif // (HKY_WIN32)
+
+				if (shm_zone[i].init(&shm_zone[i], oshm_zone[n].data) != HKY_OK) {
+					goto failed;
+				}
+				goto shm_zone_found;
+			}
+			break;
+		}
+		if (hky_shm_alloc(&shm_zone[i].shm) != HKY_OK) {
+			goto failed;
+		}
+		if(hky_init_zone_)
+	}
     
     return NULL;
+}
+
+static void 
+hky_destroy_cycle_pools(hky_conf_t *conf) {
+	hky_destory_pool(conf->temp_pool);
+	hky_destory_pool(conf->pool);
+}
+
+static hky_int_t 
+hky_init_zone_pool(hky_cycle_t *cycle, hky_shm_zone_t *zn) {
+	hky_uchar *file;
+	hky_slab_pool_t *sp;
+	sp = (hky_slab_pool_t *)zn->shm.addr;
+
+	if (zn->shm.exists) {
+		if (sp == sp->addr) {
+			return HKY_OK;
+		}
+#if (HKY_WIN32)
+		if (hky_shm_remap(&zn->shm, sp->addr) != HKY_OK) {
+			return HKY_ERROR;
+		}
+		sp = (hky_slab_pool_t *)zn->shm.addr;
+		if (sp == sp->addr) {
+			return HKY_OK;
+		}
+#endif // (HKY_WIN32)
+		hky_log_error(HKY_LOG_EMERG, cycle->log, 0,
+			"shared zone \"%V\" has no equal addresses:%p vs %p",
+			&zn->shm.name, sp->addr, sp);
+		return HKY_ERROR;
+	}
+	sp->end = zn->shm.addr + zn->shm.size;
+	sp->min_shift = 3;
+	sp->addr = zn->shm.addr;
+
+#if (HKY_HAVE_ATOMIC_OPS)
+	file = NULL;
+#else
+	file = hky_pnalloc(cycle->pool, cycle->lock_file.len + zn->shm.name.len);
+	if (file == NULL) {
+		return HKY_ERROR;
+	}
+	(void)hky_sprintf(file, "%V%V%Z", &cycle->lock_file, &zn->shm.name);
+#endif // (HKY_HAVE_ATOMIC_OPS)
+
+	if(hky_shmtx_cretae)
+}
+
+hky_int_t 
+hky_create_pidfile(hky_str_t *name, hky_log_t *log) {
+	size_t len;
+	hky_uint_t create;
+	hky_file_t file;
+	hky_uchar	pid[HKY_INT64_LEN + 2];
+
+	if (hky_process > HKY_PROCESS_MASTER) {
+		return HKY_OK;
+	}
+	hky_memzero(&file, sizeof(hky_file_t));
+	file.name = *name;
+	file.log = log;
+
+	create = hky_test_config ? HKY_FILE_CREATE_OR_OPEN : HKY_FILE_TRUNCATE;
+	file.fd = hky_open_file(file.name.data, HKY_FILE_RDWR, create, HKY_FILE_DEFAULT_ACCESS);
+	if (file.fd == HKY_INVALID_FILE) {
+		hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+			hky_open_file_n "\"%s\" failed", file.name.data);
+		return HKY_ERROR;
+	}
+	if (!hky_test_config) {
+		len = hky_snprintf(pid, HKY_INT64_LEN + 2, "%P%N", hky_pid) - pid;
+		if (hky_write_file(&file, pid, len, 0) == HKY_ERROR) {
+			return HKY_ERROR;
+		}
+	}
+	if (hky_close_file(file.fd) == HKY_FILE_ERROR) {
+		hky_log_error(HKY_LOG_ALERT, log, hky_errno,
+			hky_close_file_n " \"%s\" failed", file.name.data);
+	}
+	return HKY_OK;
+}
+
+void 
+hky_delete_pidfile(hky_cycle_t *cycle) {
+	hky_uchar	*name;
+	hky_core_conf_t *ccf;
+	ccf = (hky_core_conf_t*)hky_get_conf(cycle->conf_ctx, hky_core_module);
+	name = hky_new_binary ? ccf->oldpid.data : ccf->pid.data;
+	if (hky_delete_file(name) == HKY_FILE_ERROR) {
+		hky_log_error(HKY_LOG_ALERT, cycle->log, hky_errno,
+			hky_delete_file_n "\"%s\" failed", name);
+	}
+}
+
+
+static 
+hky_int_t hky_test_lockfile(hky_uchar *file, hky_log_t *log) {
+#if !(HKY_HAVE_ATOMIC_OPS)
+	hky_fd_t	fd;
+	fd = hky_open_file(file, HKY_FILE_RDWR, HKY_FILE_CREATE_OR_OPEN,
+		HKY_FILE_DEFAULT_ACCESS);
+	if (fd == HKY_INVALID_FILE) {
+		hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+			hky_open_file_n "\"%s\" failed", file);
+		return HKY_ERROR;
+	}
+	if (hky_close_file(fd) == HKY_FILE_ERROR) {
+		hky_log_error(HKY_LOG_ALERT, log, hky_errno,
+			hky_close_file_n "\"%s\" failed", file);
+	}
+	if (hky_delete_file(file) == HKY_FILE_ERROR) {
+		hky_log_error(HKY_LOG_ALERT, log, hky_errno,
+			hky_delete_file_n "\"%s\" failed", file);
+	}
+#endif // !(HKY_HAVE_ATOMIC_OPS)
+	return HKY_OK;
 }
 
 volatile hky_cycle_t  *hky_cycle;

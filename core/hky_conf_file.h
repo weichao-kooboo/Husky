@@ -26,6 +26,12 @@
 #define HKY_MAIN_CONF	0x01000000
 #define	HKY_ANY_CONF	0x1F000000
 
+#define HKY_CONF_UNSET	-1
+#define	HKY_CONF_UNSET_UINT	(hky_uint_t)-1
+#define	HKY_CONF_UNSET_PTR	(void*)-1
+#define	HKY_CONF_UNSET_SIZE	(size_t)-1
+#define	HKY_CONF_UNSET_MSEC	(hky_msec_t)-1
+
 #define HKY_CONF_OK          NULL
 #define HKY_CONF_ERROR       (void *) -1
 
@@ -90,6 +96,8 @@ struct hky_open_file_s{
 };
 
 #define HKY_MAX_CONF_ERRSTR 1024
+
+#define hky_get_conf(conf_ctx,module)	conf_ctx[module.index]
 
 //初始化参数
 char *hky_conf_param(hky_conf_t *cf);

@@ -72,11 +72,28 @@ hky_read_file(hky_file_t *file, hky_uchar *buf, size_t size, off_t offset);
 #define hky_read_file_n	"read()"
 #endif // (HKY_HAVE_PREAD)
 
+ssize_t
+hky_write_file(hky_file_t *file, hky_uchar *buf, size_t size, off_t offset);
 
 static hky_inline ssize_t
 hky_write_fd(hky_fd_t fd,void *buf,size_t n){
     return write(fd,buf,n);
 }
+
+#define	hky_open_dir_n	"opendir()"
+
+#define	hky_close_dir(d)	closedir((d)->dir)
+#define	hky_close_dir_n		"closedir()"
+
+#define	hky_read_dir_n		"readdir()"
+
+#define	hky_create_dir(name,access)	mkdir((const char *)name,access)
+#define	hky_create_dir_n	"mkdir()"
+
+#define	hky_delete_dir(name)	rmdir((const char *)name)
+#define	hky_delete_dir_n	"rmdir()"
+
+#define	hky_dir_access(a)	(a|(a&0444)>>2)
 
 #define hky_file_info(file,sb)  stat((const char*)file,sb)
 #define hky_file_info_n "stat()"

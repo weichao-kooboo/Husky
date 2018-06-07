@@ -59,17 +59,28 @@ struct hky_cycle_s{
     hky_str_t conf_prefix;
 	//记录前缀路径
     hky_str_t prefix;
+	hky_str_t lock_file;
 	//保存宿主名称
 	hky_str_t hostname;
 };
 
 typedef struct {
 	hky_flag_t daemon;
+	hky_str_t  pid;
+	hky_str_t  oldpid;
+
+	hky_uid_t user;
+	hky_gid_t group;
 }hky_core_conf_t;
 
+#define	hky_is_init_cycle(cycle)	(cycle->conf_ctx==NULL)
+
 hky_cycle_t *hky_init_cycle(hky_cycle_t *old_cycle);
+hky_int_t hky_create_pidfile(hky_str_t *name, hky_log_t *log);
+void hky_delete_pidfile(hky_cycle_t *cycle);
 
 extern volatile hky_cycle_t *hky_cycle;
+extern hky_module_t			  hky_core_module;
 extern hky_uint_t             hky_test_config;
 extern hky_uint_t             hky_dump_config;
 extern hky_uint_t             hky_quiet_mode;

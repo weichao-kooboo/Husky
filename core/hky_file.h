@@ -35,5 +35,6 @@ typedef struct {
 }hky_path_t;
 
 hky_int_t hky_get_full_name(hky_pool_t *pool,hky_str_t *prefix,hky_str_t *name);
+hky_int_t hky_create_paths(hky_cycle_t *cycle, hky_uid_t user);
 
 #endif // HKY_FILE_H_INCLUDED

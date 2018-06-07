@@ -427,7 +427,12 @@ hky_init_zone_pool(hky_cycle_t *cycle, hky_shm_zone_t *zn) {
 	(void)hky_sprintf(file, "%V%V%Z", &cycle->lock_file, &zn->shm.name);
 #endif // (HKY_HAVE_ATOMIC_OPS)
 
-	if(hky_shmtx_cretae)
+	if (hky_shmtx_create(&sp->mutex, &sp->lock, file) != HKY_OK) {
+		return HKY_ERROR;
+	}
+	hky_slab_init(sp);
+
+	return HKY_OK;
 }
 
 hky_int_t 

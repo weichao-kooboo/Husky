@@ -20,6 +20,8 @@ typedef	struct {
 }hky_slab_stat_t;
 
 typedef struct {
+	hky_shmtx_sh_t lock;
+
 	size_t min_size;
 	size_t min_shift;
 
@@ -33,6 +35,8 @@ typedef struct {
 	hky_uchar *start;
 	hky_uchar *end;
 
+	hky_shmtx_t mutex;
+
 	hky_uchar *log_ctx;
 	hky_uchar zero;
 
@@ -41,6 +45,8 @@ typedef struct {
 	void *data;
 	void *addr;
 }hky_slab_pool_t;
+
+void hky_slab_init(hky_slab_pool_t *pool);
 
 #endif // !_HKY_SLAB_H_INCLUDED_
 

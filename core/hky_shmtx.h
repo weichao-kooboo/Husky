@@ -27,5 +27,6 @@ typedef struct {
 }hky_shmtx_t;
 
 hky_int_t hky_shmtx_create(hky_shmtx_t *mtx, hky_shmtx_sh_t *addr, hky_uchar *name);
+void hky_shmtx_destroy(hky_shmtx_t *mtx);
 
 #endif // !_HKY_SHMTX_H_INCLUDED_

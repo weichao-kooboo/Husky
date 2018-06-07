@@ -55,6 +55,7 @@ typedef struct hky_connection_s hky_connection_t;
 #include "hky_crc32.h"
 
 #include "hky_inet.h"
+#include "hky_shmtx.h"
 #include "hky_slab.h"
 
 #include "hky_conf_file.h"

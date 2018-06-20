@@ -5,6 +5,15 @@
 static void hky_destroy_cycle_pools(hky_conf_t *conf);
 static hky_int_t hky_test_lockfile(hky_uchar *file, hky_log_t *log);
 static hky_int_t hky_init_zone_pool(hky_cycle_t *cycle, hky_shm_zone_t *shm_zone);
+static void hky_clean_old_cycles(hky_event_t *ev);
+
+static hky_pool_t *hky_temp_pool;
+hky_array_t		 hky_old_cycles;
+
+static hky_event_t hky_cleaner_event;
+static hky_event_t hky_shutdown_event;
+
+static hky_connection_t dumb;
 
 hky_cycle_t *
 hky_init_cycle(hky_cycle_t *old_cycle) {
@@ -377,9 +386,307 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 		if (hky_shm_alloc(&shm_zone[i].shm) != HKY_OK) {
 			goto failed;
 		}
-		if(hky_init_zone_)
+		if (hky_init_zone_pool(cycle, &shm_zone[i]) != HKY_OK) {
+			goto failed;
+		}
+
+		if (shm_zone[i].init(&shm_zone[i], NULL) != HKY_OK) {
+			goto failed;
+		}
+	shm_zone_found:
+		continue;
 	}
-    
+
+	if (old_cycle->listening.nelts) {
+		ls = old_cycle->listening.elts;
+		for (i = 0; i < old_cycle->listening.nelts; i++) {
+			ls[i].remain = 0;
+		}
+
+		nls = cycle->listening.elts;
+		for (n = 0; n < cycle->listening.nelts; n++) {
+			for (i = 0; i < old_cycle->listening.nelts; i++) {
+				if (ls[i].ignore) {
+					continue;
+				}
+				if (ls[i].remain) {
+					continue;
+				}
+				if (ls[i].type != nls[n].type) {
+					continue;
+				}
+				if (hky_cmp_sockaddr(nls[n].sockaddr, nls[n].socklen,
+					ls[i].sockaddr, ls[i].socklen, 1)
+					== HKY_OK) {
+					nls[n].fd = ls[i].fd;
+					nls[n].previous = &ls[i];
+					ls[i].remain = 1;
+					if (ls[i].backlog != nls[n].backlog) {
+						nls[n].listen = 1;
+					}
+#if (HKY_HAVE_DEFERRED_ACCEPT&& define SO_ACCEPTFILTER)
+					nls[n].deferred_accept = ls[i].deferred_accept;
+					if (ls[i].accept_filter&&nls[n].accept_filter) {
+						if (hky_strcmp(ls[i].accept_filter,
+							nls[n].accept_filter)
+							!= 0) {
+							nls[n].delete_deferred = 1;
+							nls[n].add_deferred = 1;
+						}
+					}
+					else if (ls[i].accept_filter) {
+						nls[n].delete_deferred = 1;
+					}
+					else if (nls[n].accept_filter) {
+						nls[n].add_deferred = 1;
+					}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&& define SO_ACCEPTFILTER)
+
+#if (HKY_HAVE_DEFERRED_ACCEPT&& defined TCP_DEFER_ACCEPT)
+					if (ls[i].deferred_accept && !nls[n].deferred_accept) {
+						nls[n].delete_deferred = 1;
+				}else if (ls[i].deferred_accept != nls[n].deferred_accept) {
+						nls[n].add_deferred = 1;
+					}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&& defined TCP_DEFER_ACCEPT)
+#if (HKY_HAVE_REUSEPORT)
+				if (nls[n].reuseport && !ls[i].reuseport) {
+					nls[n].add_reuseport = 1;
+				}
+#endif // (HKY_HAVE_REUSEPORT)
+				break;
+				}
+			}
+			if (nls[n].fd == (hky_socket_t)-1) {
+				nls[n].open = 1;
+#if (HKY_HAVE_DEFERRED_ACCEPT&& defined SO_ACCEPTFILTER)
+				if (nls[n].accept_filter) {
+					nls[n].add_deferred = 1;
+				}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&& defined SO_ACCEPTFILTER)
+#if (HKY_HAVE_DEFERRED_ACCEPT&&defined TCP_DEFER_ACCEPT)
+				if (nls[n].deferred_accept) {
+					nls[n].add_deferred = 1;
+				}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&&defined TCP_DEFER_ACCEPT)
+
+			}
+		}
+}
+	else {
+		ls = cycle->listening.elts;
+		for (i = 0; i < cycle->listening.nelts; i++) {
+			ls[i].open = 1;
+#if (HKY_HAVE_DEFERRED_ACCEPT&&defined SO_ACCEPTFILTER)
+			if (ls[i].accept_filter) {
+				ls[i].add_deferred = 1;
+			}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&&defined SO_ACCEPTFILTER)
+#if (HKY_HAVE_DEFERRED_ACCEPT&&defined TCP_DEFER_ACCEPT)
+			if (ls[i].deferred_accept) {
+				ls[i].add_deferred = 1;
+			}
+#endif // (HKY_HAVE_DEFERRED_ACCEPT&&defined TCP_DEFER_ACCEPT)
+
+		}
+	}
+	if (hky_open_listening_sockets(cycle) != HKY_OK) {
+		goto failed;
+	}
+	if (!hky_test_config) {
+		hky_configure_listening_sockets(cycle);
+	}
+	if (!hky_use_stderr) {
+		(void)hky_log_redirect_stderr(cycle);
+	}
+	pool->log = cycle->log;
+	if (hky_init_modules(cycle) != HKY_OK) {
+		exit(1);
+	}
+
+	opart = &old_cycle->shared_memory.part;
+	oshm_zone = opart->elts;
+
+	for (i = 0;; i++) {
+		if (i >= opart->nelts) {
+			if (opart->next == NULL) {
+				goto old_shm_zone_done;
+			}
+			opart = opart->next;
+			oshm_zone = opart->elts;
+			i = 0;
+		}
+		part = &cycle->shared_memory.part;
+		shm_zone = part->elts;
+		for (n = 0;; n++) {
+			if (n >= part->nelts) {
+				if (part->next == NULL) {
+					break;
+				}
+				part = part->next;
+				shm_zone = part->elts;
+				n = 0;
+			}
+			if (oshm_zone[i].shm.name.len != shm_zone[n].shm.name.len) {
+				continue;
+			}
+			if (hky_strncmp(oshm_zone[i].shm.name.data,
+							shm_zone[n].shm.name.data,
+							oshm_zone[i].shm.name.len)
+				!=0)
+			{
+				continue;
+			}
+			if (oshm_zone[i].tag == shm_zone[n].tag
+				&&oshm_zone[i].shm.size == shm_zone[n].shm.size
+				&& !oshm_zone[i].noreuse) {
+				goto live_shm_zone;
+			}
+			break;
+		}
+		hky_shm_free(&oshm_zone[i].shm);
+	live_shm_zone:
+		continue;
+	}
+old_shm_zone_done:
+
+	ls = old_cycle->listening.elts;
+	for (i = 0; i < old_cycle->listening.nelts; i++) {
+		if (ls[i].remain || ls[i].fd == (hky_socket_t)-1) {
+			continue;
+		}
+		if (hky_close_socket(ls[i].fd) == -1) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_socket_errno,
+				hky_close_socket_n " listening socket on %V failed",
+				&ls[i].addr_text);
+		}
+#if (HKY_HAVE_UNIX_DOMAIN)
+		if (ls[i].sockaddr->sa_family == AF_UNIX) {
+			hky_uchar *name;
+			name = ls[i].addr_text.data + sizeof("unix:") - 1;
+			hky_log_error(HKY_LOG_WARN, cycle->log, 0,
+				"deleting socket %s", name);
+
+			if (hky_delete_file(name) == HKY_FILE_ERROR) {
+				hky_log_error(HKY_LOG_EMERG, cycle->log, hky_socket_errno,
+					hky_delete_file_n " %s failed", name);
+			}
+		}
+#endif // (HKY_HAVE_UNIX_DOMAIN)
+	}
+	part = &old_cycle->open_files.part;
+	file = part->elts;
+
+	for (i = 0;; i++) {
+		if (i >= part->nelts) {
+			if (part->next == NULL) {
+				break;
+			}
+			part = part->next;
+			file = part->elts;
+			i = 0;
+		}
+
+		if (file[i].fd == HKY_INVALID_FILE || file[i].fd == hky_stderr) {
+			continue;
+		}
+
+		if (hky_close_file(file[i].fd) == HKY_FILE_ERROR) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+				hky_close_file_n " \"%s\" failed",
+				file[i].name.data);
+		}
+	}
+
+	hky_destroy_pool(conf.temp_pool);
+	if (hky_process == HKY_PROCESS_MASTER || hky_is_init_cycle(old_cycle)) {
+		hky_destory_pool(old_cycle->pool);
+		cycle->old_cycle = NULL;
+
+		return cycle;
+	}
+
+	if (hky_temp_pool == NULL) {
+		hky_temp_pool = hky_create_pool(128, cycle->log);
+		if (NULL == hky_temp_pool) {
+			hky_log_error(HKY_LOG_EMERG, cycle->log, 0,
+				"could not create hky_temp_pool");
+			exit(1);
+		}
+		n = 10;
+		if (hky_array_init(&hky_old_cycles, hky_temp_pool, n,
+			sizeof(hky_cycle_t *))
+			!= HKY_OK) {
+			exit(1);
+		}
+		hky_memzero(hky_old_cycles.elts, n * sizeof(hky_cycle_t*));
+
+		hky_cleaner_event.handler = hky_clean_old_cycles;
+		hky_cleaner_event.log = cycle->log;
+		hky_cleaner_event.data = &dumb;
+		dumb.fd = (hky_socket_t)-1;
+	}
+	hky_temp_pool->log = cycle->log;
+
+	old = hky_array_push(&hky_old_cycles);
+	if (old == NULL) {
+		exit(1);
+	}
+	*old = old_cycle;
+	if (!hky_cleaner_event.timer_set) {
+		hky_add_timer(&hky_cleaner_event, 30000);
+		hky_cleaner_event.timer_set = 1;
+	}
+	return cycle;
+failed:
+	if (!hky_is_init_cycle(old_cycle)) {
+		old_ccf = (hky_core_conf_t *)hky_get_conf(old_cycle->conf_ctx,
+			hky_core_module);
+		if (old_ccf->environment) {
+			environ = old_ccf->environment;
+		}
+	}
+	part = &cycle->open_files.part;
+	file = part->elts;
+
+	for (i = 0;; i++) {
+		if (i >= part->nelts) {
+			if (part->next == NULL) {
+				break;
+			}
+			part = part->next;
+			file = part->elts;
+			i = 0;
+		}
+
+		if (file[i].fd == HKY_INVALID_FILE || file[i].fd == hky_stderr) {
+			continue;
+		}
+
+		if (hky_close_file(file[i].fd) == HKY_FILE_ERROR) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_errno,
+				hky_close_file_n " \"%s\" failed",
+				file[i].name.data);
+		}
+	}
+
+	if (hky_test_config) {
+		hky_destroy_cycle_pools(&conf);
+		return NULL;
+	}
+
+	ls = cycle->listening.elts;
+	for (i = 0; i < cycle->listening.nelts; i++) {
+		if (ls[i].fd == (hky_socket_t)-1 || !ls[i].open) {
+			continue;
+		}
+		if (hky_close_socket(ls[i].fd) == -1) {
+			hky_log_error(HKY_LOG_EMERG, log, hky_socket_errno,
+				hky_close_socket_n " %V failed",
+				&ls[i].addr_text);
+		}
+	}
+	hky_destroy_cycle_pools(&conf);
     return NULL;
 }
 
@@ -481,6 +788,50 @@ hky_delete_pidfile(hky_cycle_t *cycle) {
 	}
 }
 
+static void 
+hky_clean_old_cycles(hky_event_t *ev) {
+	hky_uint_t i, n, found, live;
+	hky_log_t *log;
+	hky_cycle_t **cycle;
+
+	log = hky_cycle->log;
+	hky_temp_pool->log = log;
+
+	hky_log_debug0(HKY_LOG_DEBUG_CORE, log, 0, "clean old cycles");
+
+	live = 0;
+	cycle = hky_old_cycles.elts;
+	for (i = 0; i < hky_old_cycles.nelts; i++) {
+		if (cycle[i] == NULL) {
+			continue;
+		}
+
+		found = 0;
+		for (n = 0; n < cycle[i]->connection_n; n++) {
+			if (cycle[i]->connections[n].fd != (hky_socket_t)-1) {
+				found = 1;
+				hky_log_debug1(HKY_LOG_DEBUG_CORE, log, 0, "live fd:%ui", n);
+				break;
+			}
+		}
+		if (found) {
+			live = 1;
+			continue;
+		}
+		hky_log_debug1(HKY_LOG_DEBUG_CORE, log, 0, "clean old cycle: %ui", i);
+		hky_destroy_pool(cycle[i]->pool);
+		cycle[i] = NULL;
+	}
+	hky_log_debug1(HKY_LOG_DEBUG_CORE, log, 0, "old cycles status: %ui", live);
+	if (live) {
+		hky_add_timer(ev, 30000);
+	}
+	else {
+		hky_destroy_pool(hky_temp_pool);
+		hky_temp_pool = NULL;
+		hky_old_cycles.nelts = 0;
+	}
+}
 
 static 
 hky_int_t hky_test_lockfile(hky_uchar *file, hky_log_t *log) {

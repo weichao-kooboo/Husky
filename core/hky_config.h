@@ -84,7 +84,7 @@ typedef intptr_t        hky_flag_t;
 
 #define hky_align(d, a)     (((d) + (a - 1)) & ~(a - 1))
 #define hky_align_ptr(p, a)                                                   \
-    (u_char *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) & ~((uintptr_t) a - 1))
+    (hky_uchar *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) & ~((uintptr_t) a - 1))
 
 
 #define hky_abort       abort

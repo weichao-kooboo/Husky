@@ -14,6 +14,9 @@ struct hky_module_s{
 	hky_command_t	*commands;
 	//模块类型,用于过滤模块
 	hky_uint_t type;
+
+	hky_int_t	(*init_master)(hky_log_t *log);
+	hky_int_t	(*init_module)(hky_cycle_t *cycle);
 };
 typedef struct{
     hky_str_t name;
@@ -22,6 +25,7 @@ typedef struct{
 } hky_core_module_t;
 
 hky_int_t hky_cycle_modules(hky_cycle_t *cycle);
+hky_int_t hky_init_modules(hky_cycle_t *cycle);
 
 extern hky_module_t *hky_modules[];
 extern hky_uint_t hky_max_module;

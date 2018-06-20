@@ -50,6 +50,11 @@ struct hky_cycle_s{
 	hky_rbtree_t config_dump_rbtree;
 	//dump的rbtree节点
 	hky_rbtree_node_t config_dump_sentinel;
+
+	hky_uint_t connection_n;
+	hky_uint_t files_n;
+
+	hky_connection_t	*connections;
 	//保存老的cycle结构
 	hky_cycle_t *old_cycle;
 	//记录配置路径
@@ -71,6 +76,7 @@ typedef struct {
 
 	hky_uid_t user;
 	hky_gid_t group;
+	char	**environment;
 }hky_core_conf_t;
 
 #define	hky_is_init_cycle(cycle)	(cycle->conf_ctx==NULL)

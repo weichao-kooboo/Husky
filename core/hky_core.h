@@ -16,11 +16,14 @@ typedef struct hky_conf_s hky_conf_t;
 typedef  struct hky_pool_s hky_pool_t;
 typedef struct hky_chain_s hky_chain_t;
 typedef struct hky_log_s hky_log_t;
+typedef struct hky_event_s hky_event_t;
 typedef struct hky_open_file_s hky_open_file_t;
 typedef struct hky_command_s hky_command_t;
 typedef struct hky_file_s hky_file_t;
 typedef struct hky_cycle_s hky_cycle_t;
 typedef struct hky_connection_s hky_connection_t;
+
+typedef	void(*hky_event_handler_pt)(hky_event_t *ev);
 
 #define HKY_OK 0
 #define HKY_ERROR -1

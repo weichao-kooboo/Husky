@@ -33,5 +33,7 @@ hky_int_t hky_inet6_addr(hky_uchar *p, size_t len, hky_uchar *addr);
 #endif
 size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 	size_t len, hky_uint_t port);
+hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
+	struct sockaddr *sa2, socklen_t slen2, hky_uint_t cmp_port);
 
 #endif // HKY_INET_H_INCLUDED

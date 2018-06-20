@@ -21,3 +21,15 @@ hky_cycle_modules(hky_cycle_t *cycle) {
 
 	return HKY_OK;
 }
+hky_int_t 
+hky_init_modules(hky_cycle_t *cycle) {
+	hky_uint_t i;
+	for (i = 0; cycle->modules[i]; i++) {
+		if (cycle->modules[i]->init_module) {
+			if (cycle->modules[i]->init_module(cycle) != HKY_OK) {
+				return HKY_ERROR;
+			}
+		}
+	}
+	return HKY_OK;
+}

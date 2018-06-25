@@ -51,7 +51,6 @@ struct hky_listening_s {
 	unsigned inherited : 1;
 	unsigned nonblocking_accept : 1;
 	unsigned listen : 1;
-	unsigned nonblocking_accept : 1;
 	unsigned shared : 1;
 	unsigned addr_ntop : 1;
 	unsigned wildcard : 1;

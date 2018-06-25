@@ -301,7 +301,7 @@ hky_open_listening_sockets(hky_cycle_t *cycle) {
 					return HKY_ERROR;
 				}
 			}
-			hky_log_debug2(HKY_LOG_DEBUG_CORE, log, 0
+			hky_log_debug2(HKY_LOG_DEBUG_CORE, log, 0,
 				"bind() %V #%d", &ls[i].addr_text, s);
 
 			if (bind(s, ls[i].sockaddr, ls[i].socklen) == -1) {

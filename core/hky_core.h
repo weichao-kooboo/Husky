@@ -13,7 +13,7 @@ typedef int hky_int;
 
 typedef struct hky_module_s hky_module_t;
 typedef struct hky_conf_s hky_conf_t;
-typedef  struct hky_pool_s hky_pool_t;
+typedef struct hky_pool_s hky_pool_t;
 typedef struct hky_chain_s hky_chain_t;
 typedef struct hky_log_s hky_log_t;
 typedef struct hky_event_s hky_event_t;

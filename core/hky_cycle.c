@@ -1,6 +1,7 @@
 
 #include "hky_config.h"
 #include "hky_core.h"
+#include "../event/hky_event.h"
 
 static void hky_destroy_cycle_pools(hky_conf_t *conf);
 static hky_int_t hky_test_lockfile(hky_uchar *file, hky_log_t *log);
@@ -424,7 +425,7 @@ hky_init_cycle(hky_cycle_t *old_cycle) {
 					if (ls[i].backlog != nls[n].backlog) {
 						nls[n].listen = 1;
 					}
-#if (HKY_HAVE_DEFERRED_ACCEPT&& define SO_ACCEPTFILTER)
+#if (HKY_HAVE_DEFERRED_ACCEPT&& defined SO_ACCEPTFILTER)
 					nls[n].deferred_accept = ls[i].deferred_accept;
 					if (ls[i].accept_filter&&nls[n].accept_filter) {
 						if (hky_strcmp(ls[i].accept_filter,

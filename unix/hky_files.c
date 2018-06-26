@@ -5,7 +5,7 @@
 ssize_t
 hky_read_file(hky_file_t *file, hky_uchar *buf, size_t size, off_t offset) {
 	ssize_t n;
-	hky_log_debug4(HKY_LOG_DEBUG_CORE, file->log, 0
+	hky_log_debug4(HKY_LOG_DEBUG_CORE, file->log, 0,
 		"read: %d, %p, %uz, %0", file->fd, buf, size, offset);
 
 #if(HKY_HAVE_PREAD)

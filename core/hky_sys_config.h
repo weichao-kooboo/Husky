@@ -13,6 +13,10 @@
 #define HKY_MAX_TIME_T_VALUE 9223372036854775807LL
 #endif // HKY_MAX_TIME_T_VALUE
 
+#ifndef HKY_CPU_CACHE_LINE
+#define HKY_CPU_CACHE_LINE  64
+#endif
+
 #ifndef HKY_ERROR_LOG_PATH
 #define HKY_ERROR_LOG_PATH "logs/error.log"
 #endif // HKY_ERROR_LOG_PATH

@@ -28,6 +28,32 @@ typedef struct {
         hky_str_t name;
 }   hky_addr_t;
 
+typedef	struct {
+	hky_str_t	url;
+	hky_str_t	host;
+	hky_str_t	port_text;
+	hky_str_t	uri;
+
+	in_port_t	port;
+	in_port_t	default_port;
+	int			family;
+
+	unsigned	listen : 1;
+	unsigned	uri_part : 1;
+	unsigned	no_resolve : 1;
+
+	unsigned	no_port : 1;
+	unsigned	wildcard : 1;
+	
+	socklen_t	socklen;
+	hky_sockaddr_t	sockaddr;
+
+	hky_addr_t	*addrs;
+	hky_uint_t	naddrs;
+
+	char		*err;
+}hky_url_t;
+
 #if(HKY_HAVE_INET6)
 hky_int_t hky_inet6_addr(hky_uchar *p, size_t len, hky_uchar *addr);
 #endif
@@ -35,5 +61,6 @@ size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 	size_t len, hky_uint_t port);
 hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
 	struct sockaddr *sa2, socklen_t slen2, hky_uint_t cmp_port);
+hky_int_t	hky_parse_url(hky_pool_t *pool, hky_url_t *u);
 
 #endif // HKY_INET_H_INCLUDED

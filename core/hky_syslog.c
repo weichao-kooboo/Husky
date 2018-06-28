@@ -54,7 +54,40 @@ hky_syslog_process_conf(hky_conf_t *cf,hky_syslog_peer_t *peer){
 
 static char *
 hky_syslog_parse_args(hky_conf_t *cf,hky_syslog_peer_t *peer){
-    
+	hky_uchar	*p, *comma, c;
+	size_t	len;
+	hky_str_t	*value;
+	hky_url_t	u;
+	hky_uint_t	i;
+
+	value = cf->args->elts;
+
+	p = value[1].data + sizeof("syslog:") - 1;
+
+	for (;;) {
+		comma = (hky_uchar*)hky_strchr(p, ',');
+		if (comma != NULL) {
+			len = comma - p;
+			*comma = '\0';
+		}
+		else {
+			len = value[1].data + value[1].len - p;
+		}
+		if (hky_strncmp(p, "server=", 7) == 0) {
+			if (peer->server.sockaddr != NULL) {
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"duplicate syslog \"server\"");
+				return HKY_CONF_ERROR;
+			}
+			hky_memzero(&u, sizeof(hky_url_t));
+
+			u.url.data = p + 7;
+			u.url.len = len - 7;
+			u.default_port = 514;
+
+			if(hky_parse_url)
+		}
+	}
 }
 
 hky_uchar *
@@ -114,6 +147,17 @@ hky_syslog_send(hky_syslog_peer_t *peer, hky_uchar *buf, size_t len) {
 	else {
 		n = hky_os_io.send(&peer->conn, buf, len);
 	}
+#if (HKY_HAVE_UNIX_DOMAIN)
+	if (n == HKY_ERROR && peer->server.sockaddr->sa_family == AF_UNIX) {
+		if (hky_close_socket(peer->conn.fd)==-1)
+		{
+			hky_log_error(HKY_LOG_ALERT, hky_cycle->log, hky_socket_errno,
+				hky_close_socket_n " failed");
+		}
+		peer->conn.fd = (hky_socket_t)-1;
+	}
+#endif // (HKY_HAVE_UNIX_DOMAIN)
+	return n;
 }
 static hky_int_t 
 hky_syslog_init_peer(hky_syslog_peer_t *peer) {

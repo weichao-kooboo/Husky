@@ -2,6 +2,10 @@
 #include "hky_config.h"
 #include "hky_core.h"
 
+static hky_int_t hky_parse_unix_domain_url(hky_pool_t *pool, hky_url_t *u);
+static hky_int_t hky_parse_inet_url(hky_pool_t *pool, hky_url_t *u);
+static hky_int_t hky_parse_inet6_url(hky_pool_t *pool, hky_url_t *u);
+
 #if(HKY_HAVE_INET6)
 size_t hky_inet6_ntop(hky_uchar *p, hky_uchar *text, size_t len) {
 	hky_uchar *dst;
@@ -186,4 +190,158 @@ hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
 		break;
 	}
 	return HKY_OK;
+}
+
+hky_int_t	
+hky_parse_url(hky_pool_t *pool, hky_url_t *u) {
+	hky_uchar	*p;
+	size_t len;
+
+	p = u->url.data;
+	len = u->url.len;
+
+	if (len >= 5 && hky_strncasecmp(p, (hky_uchar*)"unix:", 5) == 0) {
+		return hky_parse_unix_domain_url(pool, u);
+	}
+	if (len&&p[0] == '[') {
+		return hky_parse_inet6_url(pool, u);
+	}
+	return hky_parse_inet_url(pool, u);
+}
+
+static hky_int_t 
+hky_parse_unix_domain_url(hky_pool_t *pool, hky_url_t *u) {
+#if (HKY_HAVE_UNIX_DOMAIN)
+	hky_uchar	*path, *uri, *last;
+	size_t	len;
+	struct sockaddr_in	*saun;
+
+	len = u->url.len;
+	path = u->url.data;
+
+	path += 5;
+	len -= 5;
+
+	if (u->uri_part) {
+		last = path + len;
+		uri = hky_strlchr(path, last, ':');
+
+		if (uri) {
+			len = uri - path;
+			uri++;
+			u->uri.len = last - uri;
+			u->uri.data = uri;
+		}
+	}
+	if (len == 0) {
+		u->err = "no path in the unix domain socket";
+		return HKY_ERROR;
+	}
+
+	u->host.len = len++;
+	u->host.data = path;
+
+	if (len > sizeof(saun->sun_path)) {
+		u->err = "too long path in the unix domain socket";
+		return HKY_ERROR;
+	}
+
+	u->socklen = sizeof(struct sockaddr_un);
+	saun = (struct sockaddr_un*)&u->sockaddr;
+	saun->sun_family = AF_UNIX;
+	(void)hky_cpystrn((hky_uchar*)saun->sun_path, path, len);
+
+	u->addrs = hky_pcalloc(pool, sizeof(hky_addr_t));
+	if (u->addrs == NULL) {
+		return HKY_ERROR;
+	}
+
+	saun = hky_pcalloc(pool, sizeof(struct sockaddr_un));
+	if (saun == NULL) {
+		return HKY_ERROR;
+	}
+
+	u->family = AF_UNIX;
+	u->naddrs = 1;
+
+	saun->sun_family = AF_UNIX;
+	(void)hky_cpystrn((hky_uchar*)saun->sun_path, path, len);
+
+	u->addrs[0].sockaddr = (struct sockaddr*)saun;
+	u->addrs[0].socklen = sizeof(struct sockaddr_un);
+	u->addrs[0].name.len = len + 4;
+	u->addrs[0].name.data = u->url.data;
+
+	return HKY_OK;
+#else
+	u->err = "the unix domain sockets are not supported on this platform";
+	return HKY_ERROR;
+#endif // (HKY_HAVE_UNIX_DOMAIN)
+
+}
+static hky_int_t 
+hky_parse_inet_url(hky_pool_t *pool, hky_url_t *u) {
+	hky_uchar	*p, *host, *port, *last, *uri, *args;
+	size_t		len;
+	hky_int_t	n;
+	struct sockaddr_in	*sin;
+#if (HKY_HAVE_INET6)
+	struct sockaddr_in6	*sin6;
+#endif // (HKY_HAVE_INET6)
+	u->socklen = sizeof(struct sockaddr_in);
+	sin = (struct sockaddr_in *)&u->sockaddr;
+	sin->sin_family = AF_INET;
+
+	u->family = AF_INET;
+	host = u->url.data;
+	last = host + u->url.len;
+	port = hky_strlchr(host, last, ':');
+	uri = hky_strlchr(host, last, '/');
+	args = hky_strlchr(host, last, '?');
+	if (args) {
+		if (uri == NULL || args < uri) {
+			uri = args;
+		}
+	}
+	if (uri) {
+		if (u->listen || !u->uri_part) {
+			u->err = "invalid host";
+			return HKY_ERROR;
+		}
+		u->uri.len = last - uri;
+		u->uri.data = uri;
+
+		last = uri;
+		if (uri < port) {
+			port = NULL;
+		}
+	}
+	if (port) {
+		port++;
+		len = last - port;
+		n = hky_atoi(port, len);
+		if (n < 1 || n>65535) {
+			u->err = "invalid port";
+			return HKY_ERROR;
+		}
+
+		u->port = (in_port_t)n;
+		sin->sin_port = htons((in_port_t)n);
+
+		u->port_text.len = len;
+		u->port_text.data = port;
+
+		last = port - 1;
+	}
+	else {
+		if (uri == NULL) {
+			if (u->listen) {
+
+			}
+		}
+	}
+}
+static hky_int_t 
+hky_parse_inet6_url(hky_pool_t *pool, hky_url_t *u) {
+
 }

@@ -70,7 +70,11 @@ struct hky_listening_s {
 };
 
 struct hky_connection_s{
+	void		*data;
+	hky_event_t *read;
+	hky_event_t *write;
 	hky_socket_t	fd;
+	hky_log_t	*log;
 };
 
 hky_int_t hky_set_inherited_sockets(hky_cycle_t *cycle);

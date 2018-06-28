@@ -14,6 +14,8 @@ typedef struct{
 } hky_syslog_peer_t;
 
 char *hky_syslog_process_conf(hky_conf_t *cf,hky_syslog_peer_t *peer);
+hky_uchar *hky_syslog_add_header(hky_syslog_peer_t *peer, hky_uchar *buf);
 void hky_syslog_writer(hky_log_t *log,hky_uint_t level,hky_uchar *buf,size_t len);
+ssize_t hky_syslog_send(hky_syslog_peer_t *peer, hky_uchar *buf, size_t len);
 
 #endif // HKY_SYSLOG_H_INCLUDED

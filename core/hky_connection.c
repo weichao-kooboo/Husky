@@ -3,6 +3,8 @@
 #include "hky_core.h"
 #include "../event/hky_event.h"
 
+hky_os_io_t hky_io;
+
 
 hky_int_t 
 hky_set_inherited_sockets(hky_cycle_t *cycle) {

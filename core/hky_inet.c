@@ -67,6 +67,40 @@ if (i < 14) {
 }
 #endif
 
+in_addr_t 
+hky_inet_addr(hky_uchar *text, size_t len) {
+	hky_uchar *p, c;
+	in_addr_t	addr;
+	hky_uint_t octet, n;
+
+	addr = 0;
+	octet = 0;
+	n = 0;
+
+	for (p = text; p < text + len; p++) {
+		c = *p;
+		if (c >= '0'&&c <= '9') {
+			octet = octet * 10 + (c - '0');
+
+			if (octet > 255) {
+				return INADDR_NONE;
+			}
+			continue;
+		}
+		if (c == '.') {
+			addr = (addr << 8) + octet;
+			octet = 0;
+			n++;
+			continue;
+		}
+		return INADDR_NONE;
+	}
+	if (n == 3) {
+		addr = (addr << 8) + octet;
+		return htonl(addr);
+	}
+	return INADDR_NONE;
+}
 size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 	size_t len, hky_uint_t port) {
 	hky_uchar *p;
@@ -336,12 +370,305 @@ hky_parse_inet_url(hky_pool_t *pool, hky_url_t *u) {
 	else {
 		if (uri == NULL) {
 			if (u->listen) {
+				n = hky_atoi(host, last - host);
+				if (n != HKY_ERROR) {
+					if (n < 1 || n>65535) {
+						u->err = "invalid port";
+						return HKY_ERROR;
+					}
+					u->port = (in_port_t)n;
+					sin->sin_port = htons((in_port_t)n);
 
+					u->port_text.len = last - host;
+					u->port_text.data = host;
+
+					u->wildcard = 1;
+					return HKY_OK;
+				}
 			}
 		}
+		u->no_port = 1;
+		u->port = u->default_port;
+		sin->sin_port = htons(u->default_port);
 	}
+	len = last - host;
+	if (len == 0) {
+		u->err = "no host";
+		return HKY_ERROR;
+	}
+	u->host.len = len;
+	u->host.data = host;
+
+	if (u->listen&&len == 1 && *host == '*') {
+		sin->sin_addr.s_addr = INADDR_ANY;
+		u->wildcard = 1;
+		return HKY_OK;
+	}
+
+	sin->sin_addr.s_addr = hky_inet_addr(host, len);
+
+	if (sin->sin_addr.s_addr != INADDR_NONE) {
+		if (sin->sin_addr.s_addr == INADDR_ANY) {
+			u->wildcard = 1;
+		}
+		u->naddrs = 1;
+		u->addrs = hky_pcalloc(pool, sizeof(hky_addr_t));
+		if (u->addrs == NULL) {
+			return HKY_ERROR;
+		}
+		sin = hky_pcalloc(pool, sizeof(struct sockaddr_in));
+		if (sin == NULL) {
+			return HKY_ERROR;
+		}
+		hky_memcpy(sin, &u->sockaddr, sizeof(struct sockaddr_in));
+
+		u->addrs[0].sockaddr = (struct sockaddr*)sin;
+		u->addrs[0].socklen = sizeof(struct sockaddr_in);
+
+		p = hky_pnalloc(pool, u->host.len + sizeof(":65535") - 1);
+		if (p == NULL) {
+			return HKY_ERROR;
+		}
+
+		u->addrs[0].name.len = hky_sprintf(p, "%V:%d",
+			&u->host, u->port) - p;
+		u->addrs[0].name.data = p;
+		return HKY_OK;
+	}
+	if (u->no_resolve) {
+		return HKY_OK;
+	}
+	if (hky_inet_resolve_host(pool, u) != HKY_OK) {
+		return HKY_ERROR;
+	}
+
+	u->family = u->addrs[0].sockaddr->sa_family;
+	u->socklen = u->addrs[0].socklen;
+	hky_memcpy(&u->sockaddr, u->addrs[0].sockaddr, u->addrs[0].socklen);
+
+	switch (u->family)
+	{
+#if (HKY_HAVE_INET6)
+	case AF_INET6:
+		sin6 = (struct sockaddr_in6*)&u->sockaddr;
+		if (IN6_IS_ADDR_UNSPECIFIED(&sin6->sin6_addr)) {
+			u->wildcard = 1;
+		}
+		break;
+#endif // (HKY_HAVE_INET6)
+	default:
+		sin = (struct sockaddr_in*)&u->sockaddr;
+		if (sin->sin_addr.s_addr == INADDR_ANY) {
+			u->wildcard = 1;
+		}
+		break;
+	}
+	return HKY_OK;
 }
 static hky_int_t 
 hky_parse_inet6_url(hky_pool_t *pool, hky_url_t *u) {
+#if (HKY_HAVE_INET6)
+#else
+#endif // (HKY_HAVE_INET6)
 
 }
+
+#if (HKY_HAVE_GETADDRINFO&&HKY_HAVE_INET6)
+hky_int_t 
+hky_inet_resolve_host(hky_pool_t *pool, hky_url_t *u) {
+	hky_uchar	*p, *host;
+	size_t	len;
+	in_port_t	port;
+	hky_uint_t	i;
+	struct addrinfo	hints, *res, *rp;
+	struct sockaddr_in	*sin;
+	struct sockaddr_in6	*sin6;
+
+	port = htons(u->port);
+	host = hky_alloc(u->host.len + 1, pool->log);
+	if (host == NULL) {
+		return HKY_ERROR;
+	}
+
+	(void)hky_cpystrn(host, u->host.data, u->host.len + 1);
+
+	hky_memzero(&hints, sizeof(struct addrinfo));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+#ifdef AI_ADDRCONFIG
+	hints.ai_flags = AI_ADDRCONFIG;
+#endif // AI_ADDRCONFIG
+	if (getaddrinfo((char*)host, NULL, &hints, &res) != 0) {
+		u->err = "host not found";
+		hky_free(host);
+		return HKY_ERROR;
+	}
+
+	hky_free(host);
+	for (i = 0, rp = res; rp != NULL; rp = rp->ai_next) {
+		switch (rp->ai_family)
+		{
+		case AF_INET:
+		case AF_INET6:
+			break;
+		default:
+			continue;
+		}
+		i++;
+	}
+	if (i == 0) {
+		u->err = "host not found";
+		goto failed;
+	}
+	u->addrs = hky_pcalloc(pool, i * sizeof(hky_addr_t));
+	if (u->addrs == NULL) {
+		goto failed;
+	}
+	u->naddrs = i;
+	i = 0;
+
+	for (rp = res; rp != NULL; rp = rp->ai_next) {
+		if (rp->ai_family != AF_INET) {
+			continue;
+		}
+		sin = hky_pcalloc(pool, rp->ai_addrlen);
+		if (sin == NULL) {
+			goto failed;
+		}
+		hky_memcpy(sin, rp->ai_addr, rp->ai_addrlen);
+		sin->sin_port = port;
+		u->addrs[i].sockaddr = (struct sockaddr*)sin;
+		u->addrs[i].socklen = rp->ai_addrlen;
+
+		len = HKY_INET_ADDRSTRLEN + sizeof(":65535") - 1;
+		p = hky_pnalloc(pool, len);
+		if (p == NULL) {
+			goto failed;
+		}
+		len = hky_sock_ntop((struct sockaddr*)sin, rp->ai_addrlen, p, len, 1);
+
+		u->addrs[i].name.len = len;
+		u->addrs[i].name.data = p;
+		i++;
+	}
+	for (rp = res; rp != NULL; rp = rp->ai_next) {
+		if (rp->ai_family != AF_INET6) {
+			continue;
+		}
+		sin6 = hky_pcalloc(pool, rp->ai_addrlen);
+		if (sin6 == NULL) {
+			goto failed;
+		}
+		hky_memcpy(sin6, rp->ai_addr, rp->ai_addrlen);
+
+		sin6->sin6_port = port;
+
+		u->addrs[i].sockaddr = (struct sockaddr *)sin6;
+		u->addrs[i].socklen = rp->ai_addrlen;
+
+		len = HKY_INET6_ADDRSTRLEN + sizeof("[]:65535") - 1;
+
+		p = hky_pnalloc(pool, len);
+		if (p == NULL) {
+			goto failed;
+		}
+
+		len = hky_sock_ntop((struct sockaddr*)sin6, rp->ai_addrlen, p, len, 1);
+
+		u->addrs[i].name.len = len;
+		u->addrs[i].name.data = p;
+		i++;
+	}
+	freeaddrinfo(res);
+	return HKY_OK;
+failed:
+	freeaddrinfo(res);
+	return HKY_ERROR;
+}
+#else
+hky_int_t
+hky_inet_resolve_host(hky_pool_t *pool, hky_url_t *u) {
+	hky_uchar	*p, *host;
+	size_t	len;
+	in_port_t	port;
+	in_addr_t	in_addr;
+	hky_uint_t	i;
+	struct hostent	*h;
+	struct sockaddr_in	*sin;
+
+	port = htons(u->port);
+	in_addr = hky_inet_addr(u->host.data, u->host.len);
+	if (in_addr == INADDR_NONE) {
+		host = hky_alloc(u->host.len + 1, pool->log);
+		if (NULL == host) {
+			return HKY_ERROR;
+		}
+		(void)hky_cpystrn(host, u->host.data, u->host.len + 1);
+
+		h = gethostbyname((char*)host);
+		hky_free(host);
+
+		if (h == NULL || h->h_addr_list[0] == NULL) {
+			u->err = "host not found";
+			return HKY_ERROR;
+		}
+		for (i = 0; h->h_addr_list[i] != NULL; i++) {	}
+
+		u->addrs = hky_pcalloc(pool, i * sizeof(hky_addr_t));
+		if (u->addrs == NULL) {
+			return HKY_ERROR;
+		}
+		u->naddrs = i;
+		for (i = 0; i < u->naddrs; i++) {
+			sin = hky_pcalloc(pool, sizeof(struct sockaddr_in));
+			if (sin == NULL) {
+				return HKY_ERROR;
+			}
+
+			sin->sin_family = AF_INET;
+			sin->sin_port = port;
+			sin->sin_addr.s_addr = *(in_addr_t *)(h->h_addr_list[i]);
+
+			u->addrs[i].sockaddr = (struct sockaddr *)sin;
+			u->addrs[i].socklen = sizeof(struct sockaddr_in);
+
+			len = HKY_INET_ADDRSTRLEN + sizeof(":65535") - 1;
+
+			p = hky_pnalloc(pool, len);
+			if (p == NULL) {
+				return HKY_ERROR;
+			}
+			len = hky_sock_ntop((struct sockaddr *)sin,
+				sizeof(struct sockaddr_in), p, len, 1);
+			u->addrs[i].name.len = len;
+			u->addrs[i].name.data = p;
+		}
+	}
+	else {
+		u->addrs = hky_pcalloc(pool, sizeof(hky_addr_t));
+		if (u->addrs == NULL) {
+			return HKY_ERROR;
+		}
+		sin = hky_pcalloc(pool, sizeof(struct sockaddr_in));
+		if (sin == NULL) {
+			return HKY_ERROR;
+		}
+		u->naddrs = 1;
+
+		sin->sin_family = AF_INET;
+		sin->sin_port = port;
+		sin->sin_addr.s_addr = in_addr;
+
+		u->addrs[0].sockaddr = (struct sockaddr *)sin;
+		u->addrs[0].socklen = sizeof(struct sockaddr_in);
+
+		p = hky_pnalloc(pool, u->host.len + sizeof(":65535") - 1);
+		if (p == NULL) {
+			return HKY_ERROR;
+		}
+		u->addrs[0].name.len = hky_sprintf(p, "%V:%d", &u->host, ntohs(port)) - p;
+		u->addrs[0].name.data = p;
+	}
+	return HKY_OK;
+}
+#endif // (HKY_HAVE_GETADDRINFO&&HKY_HAVE_INET6)

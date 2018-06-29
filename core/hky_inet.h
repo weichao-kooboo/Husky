@@ -54,6 +54,7 @@ typedef	struct {
 	char		*err;
 }hky_url_t;
 
+in_addr_t hky_inet_addr(hky_uchar *text, size_t len);
 #if(HKY_HAVE_INET6)
 hky_int_t hky_inet6_addr(hky_uchar *p, size_t len, hky_uchar *addr);
 #endif
@@ -62,5 +63,6 @@ size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
 	struct sockaddr *sa2, socklen_t slen2, hky_uint_t cmp_port);
 hky_int_t	hky_parse_url(hky_pool_t *pool, hky_url_t *u);
+hky_int_t hky_inet_resolve_host(hky_pool_t *pool, hky_url_t *u);
 
 #endif // HKY_INET_H_INCLUDED

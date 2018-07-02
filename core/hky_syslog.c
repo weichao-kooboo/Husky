@@ -85,7 +85,22 @@ hky_syslog_parse_args(hky_conf_t *cf,hky_syslog_peer_t *peer){
 			u.url.len = len - 7;
 			u.default_port = 514;
 
-			if(hky_parse_url)
+			if (hky_parse_url(cf->pool, &u) != HKY_OK) {
+				if (u.err) {
+					hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+						"%s in syslog server \"%V\"",
+						u.err, &u.url);
+				}
+				return HKY_CONF_ERROR;
+			}
+			peer->server = u.addrs[0];
+		}
+		else if (hky_strncmp(p, "facility=", 9) == 0) {
+			if (peer->facility != HKY_CONF_UNSET_UINT) {
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"duplicate syslog \"facility\"");
+				return HKY_CONF_ERROR;
+			}
 		}
 	}
 }

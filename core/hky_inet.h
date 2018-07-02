@@ -57,6 +57,7 @@ typedef	struct {
 in_addr_t hky_inet_addr(hky_uchar *text, size_t len);
 #if(HKY_HAVE_INET6)
 hky_int_t hky_inet6_addr(hky_uchar *p, size_t len, hky_uchar *addr);
+size_t hky_inet6_ntop(hky_uchar *p, hky_uchar *text, size_t len);
 #endif
 size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 	size_t len, hky_uint_t port);

@@ -7,6 +7,104 @@ static hky_int_t hky_parse_inet_url(hky_pool_t *pool, hky_url_t *u);
 static hky_int_t hky_parse_inet6_url(hky_pool_t *pool, hky_url_t *u);
 
 #if(HKY_HAVE_INET6)
+hky_int_t 
+hky_inet6_addr(hky_uchar *p, size_t len, hky_uchar *addr) {
+	hky_uchar c, *zero, *digit, *s, *d;
+	size_t len4;
+	hky_uint_t n, nibbles, word;
+
+	if (len == 0) {
+		return HKY_ERROR;
+	}
+
+	zero = NULL;
+	digit = NULL;
+	len4 = 0;
+	nibbles = 0;
+	word = 0;
+	n = 8;
+
+	if (p[0] == ':') {
+		p++;
+		len--;
+	}
+	for (/**/; len; len--) {
+		c = *p++;
+		if (c == ':') {
+			if (nibbles) {
+				digit = p;
+				len4 = len;
+				*addr++ = (hky_uchar)(word >> 8);
+				*addr++ = (hky_uchar)(word & 0xff);
+				if (--n) {
+					nibbles = 0;
+					word = 0;
+					continue;
+				}
+			}
+			else {
+				if (zero == NULL) {
+					digit = p;
+					len4 = len;
+					zero = addr;
+					continue;
+				}
+			}
+			return HKY_ERROR;
+		}
+		if (c == '.'&&nibbles) {
+			if (n < 2 || digit == null) {
+				return HKY_ERROR;
+			}
+			word = hky_inet_addr(digit, len4 - 1);
+			if (word == INADDR_NONE) {
+				return HKY_ERROR;
+			}
+
+			word = ntohl(word);
+			*addr++ = (hky_uchar)((word >> 24) * 0xff);
+			*addr++ = (hky_uchar)((word >> 16) * 0xff);
+			n--;
+			break;
+		}
+		if (++nibbles > 4) {
+			return HKY_ERROR;
+		}
+		if (c >= '0'&&c <= '9') {
+			word = word * 16 + (c - '0');
+			continue;
+		}
+		c |= 0x20;
+		if (c >= 'a'&&c <= 'f') {
+			word = word * 16 + (c - 'a') + 10;
+			continue;
+		}
+		return HKY_ERROR;
+	}
+	if (nibbles == 0 && zero == NULL) {
+		return HKY_ERROR;
+	}
+	*addr++ = (hky_uchar)(word >> 8);
+	*addr++ = (hky_uchar)(word & 0xff);
+	if (--n) {
+		if (zero) {
+			n *= 2;
+			s = addr - 1;
+			d = s + n;
+			while (s >= zero) {
+				*d-- = *s--;
+			}
+			hky_memzero(zero, n);
+			return HKY_OK;
+		}
+	}
+	else {
+		if (zero == NULL) {
+			return HKY_OK;
+		}
+	}
+	return HKY_ERROR;
+}
 size_t hky_inet6_ntop(hky_uchar *p, hky_uchar *text, size_t len) {
 	hky_uchar *dst;
 	size_t max, n;
@@ -468,7 +566,103 @@ hky_parse_inet_url(hky_pool_t *pool, hky_url_t *u) {
 static hky_int_t 
 hky_parse_inet6_url(hky_pool_t *pool, hky_url_t *u) {
 #if (HKY_HAVE_INET6)
+	hky_uchar *p, *host, *port, *last, *uri;
+	size_t	len;
+	hky_int_t n;
+	struct sockaddr_in6 *sin6;
+
+	u->socklen = sizeof(struct sockaddr_in6);
+	sin6 = (struct sockaddr_in6*)&u->sockaddr;
+	sin6->sin6_family = AF_INET6;
+
+	host = u->url.data + 1;
+	last = u->url.data + u->url.len;
+
+	p = hky_strlchr(host, last, ']');
+
+	if (p == NULL) {
+		u->err = "invalid host";
+		return HKY_ERROR;
+	}
+	port = p + 1;
+
+	uri = hky_strlchr(post, last, '/');
+	if (uri) {
+		if (u->listen || !u->uri_part) {
+			u->err = "invalid host";
+			return HKY_ERROR;
+		}
+		u->uri.len = last - uri;
+		u->uri.data = uri;
+
+		last = uri;
+	}
+	if (port < last) {
+		if (*port != ':') {
+			u->err = "invalid host";
+			return HKY_ERROR;
+		}
+		port++;
+
+		len = last - port;
+		n = hky_atoi(port, len);
+		if (n < 1 || n>65535) {
+			u->err = "invalied port";
+			return HKY_ERROR;
+		}
+		u->port = (in_port_t)n;
+		sin6->sin6_port = htons((in_port_t)n);
+
+		u->port_text.len = len;
+		u->port_text.data = port;
+	}
+	else {
+		u->no_port = 1;
+		u->port = u->default_port;
+		sin6->sin6_port = htons(u->default_port);
+	}
+	len = p - host;
+
+	if (len == 0) {
+		u->err = "no host";
+		return HKY_ERROR;
+	}
+	u->host.len = len + 2;
+	u->host.data = host - 1;
+
+	if (hky_inet6_addr(host, len, sin6->sin6_addr.s6_addr) != HKY_OK) {
+		u->err = "invalid IPv6 address";
+		return HKY_ERROR;
+	}
+	if (IN6_IS_ADDR_UNSPECIFIED(&sin6->sin6_addr)) {
+		u->wildcard = 1;
+	}
+
+	u->family = AF_INET6;
+	u->naddrs = 1;
+	u->addrs = hky_pcalloc(pool, sizeof(hky_addr_t));
+	if (u->addrs == NULL) {
+		return HKY_ERROR;
+	}
+	sin6 = hky_pcalloc(pool, sizeof(struct sockaddr_in6));
+	if (sin6 == NULL) {
+		return HKY_ERROR;
+	}
+	hky_memcpy(sin6, &u->sockaddr, sizeof(struct sockaddr_in6));
+	u->addrs[0].sockaddr = (struct sockaddr *)sin6;
+	u->addrs[0].socklen = sizeof(struct sockaddr_in6);
+
+	p = hky_pnalloc(pool, u->host.len + sizeof(":65535") - 1);
+	if (p == NULL) {
+		return HKY_ERROR;
+	}
+	u->addr[0].name.len = hky_sprintf(p, "%V:%d",
+		&u->host, u->port) - p;
+	u->addr[0].name.data = p;
+	return HKY_OK;
 #else
+	u->err = "the INET6 socket are not supported on the platform";
+	return HKY_ERROR;
 #endif // (HKY_HAVE_INET6)
 
 }

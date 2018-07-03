@@ -101,8 +101,69 @@ hky_syslog_parse_args(hky_conf_t *cf,hky_syslog_peer_t *peer){
 					"duplicate syslog \"facility\"");
 				return HKY_CONF_ERROR;
 			}
+			for (i = 0; facilities[i] != NULL; i++) {
+				if (hky_strcmp(p + 9, facilities[i]) == 0) {
+					peer->facility = i;
+					goto next;
+				}
+			}
+			hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+				"unknown syslog facility \"%s\"", p + 9);
+			return HKY_CONF_ERROR;
 		}
+		else if (hky_strncmp(p, "severity=", 9) == 0) {
+			if (peer->severity != HKY_CONF_UNSET_UINT) {
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"duplicate syslog \"severity\"");
+				return HKY_CONF_ERROR;
+			}
+			for (i = 0; severities[i] != NULL; i++) {
+				if (hky_strcmp(p + 9, severities[i]) == 0) {
+					peer->severity = i;
+					goto next;
+				}
+			}
+			hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+				"unknown syslog severity \"%s\"", p + 9);
+			return HKY_CONF_ERROR;
+		}
+		else if (hky_strncmp(p, "tag=", 4) == 0) {
+			if (peer->tag.data != NULL) {
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"duplicate syslog \"tag\"");
+				return HKY_CONF_ERROR;
+			}
+			if (len - 4 > 32) {
+				hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+					"syslog tag length exceeds 32");
+				return HKY_CONF_ERROR;
+			}
+			for (i = 4; i < len; i++) {
+				c = hky_tolower(p[i]);
+				if (c < '0' || (c > '9' && c < 'a' && c != '_') || c > 'z') {
+					hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+						"syslog \"tag\" only allows alphanumeric characters and underscore");
+					return HKY_CONF_ERROR;
+				}
+			}
+			peer->tag.data = p + 4;
+			peer->tag.len = len - 4;
+		}
+		else if (len == 10 && hky_strncmp(p, "nohostname", 10) == 0) {
+			peer->nohostname = 1;
+		}
+		else {
+			hky_conf_log_error(HKY_LOG_EMERG, cf, 0,
+				"unknown syslog parameter \"%s\"", p);
+			return HKY_CONF_ERROR;
+		}
+	next:
+		if (comma == NULL) {
+			break;
+		}
+		p = comma + 1;
 	}
+	return HKY_CONF_OK;
 }
 
 hky_uchar *

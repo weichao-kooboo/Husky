@@ -26,6 +26,15 @@ typedef struct{
     hky_uint_t flags;
 }hky_os_io_t;
 
+ssize_t hky_unix_recv(hky_connection_t *c, hky_uchar *buf, size_t size);
+ssize_t hky_ready_chain(hky_connection_t *c, hky_chain_t *in, off_t limit);
+ssize_t hky_udp_unix_recv(hky_connection_t *c, hky_uchar *buf, size_t size);
+ssize_t hky_unix_send(hky_connection_t *c, hky_uchar *buf, size_t size);
+ssize_t hky_udp_unix_send(hky_connection_t *c, hky_uchar *buf, size_t size);
+hky_chain_t *hky_writev_chain(hky_connection_t *c, hky_chain_t *in, off_t limit);
+hky_chain_t *hky_udp_unix_sendmsg_chain(hky_connection_t *c, hky_chain_t *in, off_t limit);
+
+
 /*
 * 对所有操作系统进行统一初始化工作
 */

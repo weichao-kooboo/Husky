@@ -10,6 +10,17 @@ hky_uint_t  hky_tcp_nodelay_and_tcp_nopush;
 
 struct rlimit rlmt;
 
+hky_os_io_t hky_os_io = {
+	hky_unix_recv,
+	hky_ready_chain,
+	hky_udp_unix_recv,
+	hky_unix_send,
+	hky_udp_unix_send,
+	hky_udp_unix_sendmsg_chain,
+	hky_writev_chain,
+	0
+};
+
 hky_int_t
 hky_os_init(hky_log_t *log){
     hky_time_t  *tp;

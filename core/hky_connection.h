@@ -74,11 +74,22 @@ struct hky_connection_s{
 	hky_event_t *read;
 	hky_event_t *write;
 	hky_socket_t	fd;
+	unsigned log_error : 3;
 	hky_log_t	*log;
 };
+
+typedef enum {
+	HKY_ERROR_ALER=0,
+	HKY_ERROR_ERR,
+	HKY_ERROR_INFO,
+	HKY_ERROR_IGNORE_ECONNRESET,
+	HKY_ERROR_IGNORE_EINVAL
+} hky_connection_log_error_e;
 
 hky_int_t hky_set_inherited_sockets(hky_cycle_t *cycle);
 hky_int_t hky_open_listening_sockets(hky_cycle_t *cycle);
 void hky_configure_listening_sockets(hky_cycle_t *cycle);
+
+hky_int_t hky_connection_error(hky_connection_t *c, hky_err_t err, char *text);
 
 #endif // HKY_CONNECTION_H_INCLUDED

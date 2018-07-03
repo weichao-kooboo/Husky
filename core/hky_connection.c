@@ -617,3 +617,52 @@ hky_configure_listening_sockets(hky_cycle_t *cycle) {
 	}
 	return;
 }
+
+
+hky_int_t 
+hky_connection_error(hky_connection_t *c, hky_err_t err, char *text) {
+	hky_uint_t level;
+
+	if ((err == HKY_ECONNRESET
+#if (HKY_WIN32)
+		|| err = HKY_ECONNABORTED
+#endif // (HKY_WIN32)	
+		) && c->log_error == HKY_ERROR_IGNORE_ECONNRESET) {
+		return 0;
+	}
+#if (HKY_SOLARIS)
+	if (err == HKY_EINVAL && c->log_error == HKY_ERROR_IGNORE_EINVAL) {
+		return 0;
+	}
+#endif // (HKY_SOLARIS)
+	if (err == 0
+		|| err == HKY_ECONNRESET
+#if (HKY_WIN32)
+		|| err == HKY_ECONNABORTED
+#else
+		|| err == HKY_EPIPE
+#endif // (HKY_WIN32)
+		|| err == HKY_ENOTCONN
+		|| err == HKY_ETIMEDOUT
+		|| err == HKY_ECONNREFUSED
+		|| err == HKY_ENETDOWN
+		|| err == HKY_ENETUNREACH
+		|| err == HKY_EHOSTDOWN
+		|| err == HKY_EHOSTUNREACH) {
+		switch (c->log_error)
+		{
+		case HKY_ERROR_IGNORE_EINVAL:
+		case HKY_ERROR_IGNORE_ECONNRESET:
+		case HKY_ERROR_INFO:
+			level = HKY_LOG_INFO;
+			break;
+		default:
+			level = HKY_LOG_ERR;
+		}
+	}
+	else {
+		level = HKY_LOG_ALERT;
+	}
+	hky_log_error(level, c->log, err, text);
+	return HKY_ERROR;
+}

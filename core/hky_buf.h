@@ -36,6 +36,8 @@ struct hky_buf_s{
     int num;
 };
 
+#define HKY_CHAIN_ERROR	(hky_chain_t *)HKY_ERROR
+
 struct hky_chain_s{
     hky_buf_t *buf;
     hky_chain_t *next;

@@ -122,6 +122,10 @@ struct hky_event_s {
 };
 
 extern hky_uint_t hky_event_flags;
+#if (HKY_HAVE_EPOLLRDHUP)
+extern hky_uint_t	hky_use_epoll_rdhup;
+#endif // (HKY_HAVE_EPOLLRDHUP)
+
 
 #define hky_event_ident(e)	((hky_connection_t *)(p))->fd
 

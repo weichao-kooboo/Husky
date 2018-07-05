@@ -12,7 +12,7 @@ struct rlimit rlmt;
 
 hky_os_io_t hky_os_io = {
 	hky_unix_recv,
-	hky_ready_chain,
+	hky_readv_chain,
 	hky_udp_unix_recv,
 	hky_unix_send,
 	hky_udp_unix_send,

@@ -8,6 +8,9 @@
 #define HKY_CYCLE_POOL_SIZE	HKY_DEFAULT_POOL_SIZE
 #endif // !HKY_CYCLE_POOL_SIZE
 
+#define HKY_DEBUG_POINTS_STOP	1
+#define HKY_DEBUG_POINTS_ABORT	2
+
 typedef struct hky_shm_zone_s hky_shm_zone_t;
 typedef hky_int_t(*hky_shm_zone_init_pt)(hky_shm_zone_t *zone, void *data);
 
@@ -73,6 +76,8 @@ typedef struct {
 	hky_flag_t daemon;
 	hky_str_t  pid;
 	hky_str_t  oldpid;
+
+	hky_int_t debug_points;
 
 	hky_uid_t user;
 	hky_gid_t group;

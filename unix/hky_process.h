@@ -11,6 +11,8 @@ typedef pid_t hky_pid_t;
 #define hky_log_pid hky_pid
 #endif // hky_log_pid
 
+void hky_debug_point(void);
+
 extern int hky_argc;
 extern  char    **hky_argv;
 extern  char    **hky_os_argv;

@@ -74,8 +74,13 @@ struct hky_connection_s{
 	hky_event_t *read;
 	hky_event_t *write;
 	hky_socket_t	fd;
+	off_t sent;
+	hky_pool_t *pool;
 	unsigned log_error : 3;
 	hky_log_t	*log;
+
+	struct sockaddr *sockaddr;
+	socklen_t socklen;
 };
 
 typedef enum {

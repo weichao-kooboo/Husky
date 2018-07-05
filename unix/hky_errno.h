@@ -47,6 +47,12 @@ typedef int hky_err_t;
 #define HKY_ELOOP         ELOOP
 #define HKY_EBADF         EBADF
 
+#if (__hpux__)
+#define HKY_EAGAIN	EWOULDBLOCK
+#else
+#define HKY_EAGAIN	EAGAIN
+#endif // (__hpux__)
+
 
 #define hky_errno					errno
 #define hky_socket_errno			errno

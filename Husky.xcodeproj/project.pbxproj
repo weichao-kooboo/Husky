@@ -9,6 +9,16 @@
 /* Begin PBXBuildFile section */
 		4436457320E285FB00604B57 /* hky_cpuinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4436457220E285FB00604B57 /* hky_cpuinfo.c */; };
 		449AFBA720C040B9005D95F4 /* hky_crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 449AFBA520C040B9005D95F4 /* hky_crc32.c */; };
+		44A3100720F64E860065D6EB /* hky_udp_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100120F64E860065D6EB /* hky_udp_recv.c */; };
+		44A3100820F64E860065D6EB /* hky_udp_send.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100220F64E860065D6EB /* hky_udp_send.c */; };
+		44A3100920F64E860065D6EB /* hky_udp_sendmsg_chain.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100320F64E860065D6EB /* hky_udp_sendmsg_chain.c */; };
+		44A3100A20F64E860065D6EB /* hky_user.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100420F64E860065D6EB /* hky_user.c */; };
+		44A3100B20F64E860065D6EB /* hky_writev_chain.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100620F64E860065D6EB /* hky_writev_chain.c */; };
+		44A3101020F64E940065D6EB /* hky_shmtx.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100C20F64E940065D6EB /* hky_shmtx.c */; };
+		44A3101120F64E940065D6EB /* hky_slab.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3100E20F64E940065D6EB /* hky_slab.c */; };
+		44A3101520F64EEF0065D6EB /* hky_readv_chain.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3101220F64EEF0065D6EB /* hky_readv_chain.c */; };
+		44A3101620F64EEF0065D6EB /* hky_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3101320F64EEF0065D6EB /* hky_recv.c */; };
+		44A3101720F64EEF0065D6EB /* hky_send.c in Sources */ = {isa = PBXBuildFile; fileRef = 44A3101420F64EEF0065D6EB /* hky_send.c */; };
 		44D69C8E20BEE5A300B5C47E /* hky_array.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6620BEE5A300B5C47E /* hky_array.c */; };
 		44D69C8F20BEE5A300B5C47E /* hky_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6820BEE5A300B5C47E /* hky_buf.c */; };
 		44D69C9020BEE5A300B5C47E /* hky_conf_file.c in Sources */ = {isa = PBXBuildFile; fileRef = 44D69C6A20BEE5A300B5C47E /* hky_conf_file.c */; };
@@ -61,6 +71,19 @@
 		4436457220E285FB00604B57 /* hky_cpuinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_cpuinfo.c; sourceTree = "<group>"; };
 		449AFBA520C040B9005D95F4 /* hky_crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_crc32.c; sourceTree = "<group>"; };
 		449AFBA620C040B9005D95F4 /* hky_crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_crc32.h; sourceTree = "<group>"; };
+		44A3100120F64E860065D6EB /* hky_udp_recv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_udp_recv.c; sourceTree = "<group>"; };
+		44A3100220F64E860065D6EB /* hky_udp_send.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_udp_send.c; sourceTree = "<group>"; };
+		44A3100320F64E860065D6EB /* hky_udp_sendmsg_chain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_udp_sendmsg_chain.c; sourceTree = "<group>"; };
+		44A3100420F64E860065D6EB /* hky_user.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_user.c; sourceTree = "<group>"; };
+		44A3100520F64E860065D6EB /* hky_user.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_user.h; sourceTree = "<group>"; };
+		44A3100620F64E860065D6EB /* hky_writev_chain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_writev_chain.c; sourceTree = "<group>"; };
+		44A3100C20F64E940065D6EB /* hky_shmtx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_shmtx.c; sourceTree = "<group>"; };
+		44A3100D20F64E940065D6EB /* hky_shmtx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_shmtx.h; sourceTree = "<group>"; };
+		44A3100E20F64E940065D6EB /* hky_slab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_slab.c; sourceTree = "<group>"; };
+		44A3100F20F64E940065D6EB /* hky_slab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_slab.h; sourceTree = "<group>"; };
+		44A3101220F64EEF0065D6EB /* hky_readv_chain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_readv_chain.c; sourceTree = "<group>"; };
+		44A3101320F64EEF0065D6EB /* hky_recv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_recv.c; sourceTree = "<group>"; };
+		44A3101420F64EEF0065D6EB /* hky_send.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_send.c; sourceTree = "<group>"; };
 		44D69C6620BEE5A300B5C47E /* hky_array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_array.c; sourceTree = "<group>"; };
 		44D69C6720BEE5A300B5C47E /* hky_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hky_array.h; sourceTree = "<group>"; };
 		44D69C6820BEE5A300B5C47E /* hky_buf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hky_buf.c; sourceTree = "<group>"; };
@@ -156,6 +179,10 @@
 		44D69C6520BEE5A300B5C47E /* core */ = {
 			isa = PBXGroup;
 			children = (
+				44A3100C20F64E940065D6EB /* hky_shmtx.c */,
+				44A3100D20F64E940065D6EB /* hky_shmtx.h */,
+				44A3100E20F64E940065D6EB /* hky_slab.c */,
+				44A3100F20F64E940065D6EB /* hky_slab.h */,
 				44D69C6620BEE5A300B5C47E /* hky_array.c */,
 				44D69C6720BEE5A300B5C47E /* hky_array.h */,
 				44D69C6820BEE5A300B5C47E /* hky_buf.c */,
@@ -206,6 +233,15 @@
 		44D69CA020BEE5AE00B5C47E /* unix */ = {
 			isa = PBXGroup;
 			children = (
+				44A3101220F64EEF0065D6EB /* hky_readv_chain.c */,
+				44A3101320F64EEF0065D6EB /* hky_recv.c */,
+				44A3101420F64EEF0065D6EB /* hky_send.c */,
+				44A3100120F64E860065D6EB /* hky_udp_recv.c */,
+				44A3100220F64E860065D6EB /* hky_udp_send.c */,
+				44A3100320F64E860065D6EB /* hky_udp_sendmsg_chain.c */,
+				44A3100420F64E860065D6EB /* hky_user.c */,
+				44A3100520F64E860065D6EB /* hky_user.h */,
+				44A3100620F64E860065D6EB /* hky_writev_chain.c */,
 				44D69CA120BEE5AE00B5C47E /* hky_alloc.c */,
 				44D69CA220BEE5AE00B5C47E /* hky_alloc.h */,
 				44D69CA320BEE5AE00B5C47E /* hky_atomic.h */,
@@ -344,32 +380,42 @@
 				44D69C9120BEE5A300B5C47E /* hky_connection.c in Sources */,
 				44D69C9220BEE5A300B5C47E /* hky_cycle.c in Sources */,
 				44D69C9020BEE5A300B5C47E /* hky_conf_file.c in Sources */,
+				44A3101020F64E940065D6EB /* hky_shmtx.c in Sources */,
 				44D69C8E20BEE5A300B5C47E /* hky_array.c in Sources */,
 				44D69CCF20BEE5AE00B5C47E /* hky_process_cycle.c in Sources */,
 				44D69C9320BEE5A300B5C47E /* hky_file.c in Sources */,
 				44D69CCD20BEE5AE00B5C47E /* hky_posix_init.c in Sources */,
 				44D69CC720BEE5AE00B5C47E /* hky_alloc.c in Sources */,
 				44D69CCA20BEE5AE00B5C47E /* hky_files.c in Sources */,
+				44A3100A20F64E860065D6EB /* hky_user.c in Sources */,
 				44D69C8F20BEE5A300B5C47E /* hky_buf.c in Sources */,
 				44D69CCE20BEE5AE00B5C47E /* hky_process.c in Sources */,
 				44D69C9E20BEE5A300B5C47E /* hky_times.c in Sources */,
+				44A3101620F64EEF0065D6EB /* hky_recv.c in Sources */,
+				44A3100720F64E860065D6EB /* hky_udp_recv.c in Sources */,
 				44D69C9D20BEE5A300B5C47E /* hky_syslog.c in Sources */,
 				44D69CD520BEE5AE00B5C47E /* hky_time.c in Sources */,
 				44D69C9420BEE5A300B5C47E /* hky_inet.c in Sources */,
 				44D69CCB20BEE5AE00B5C47E /* hky_freebsd_init.c in Sources */,
+				44A3101720F64EEF0065D6EB /* hky_send.c in Sources */,
 				44D69CD020BEE5AE00B5C47E /* hky_setproctitle.c in Sources */,
 				44F4BCBB20BD9D6D00372DF9 /* main.c in Sources */,
 				44D69C9520BEE5A300B5C47E /* hky_list.c in Sources */,
 				44D69C9F20BEE5A300B5C47E /* husky.c in Sources */,
+				44A3101120F64E940065D6EB /* hky_slab.c in Sources */,
 				44D69CC820BEE5AE00B5C47E /* hky_darwin_init.c in Sources */,
 				44D69C9620BEE5A300B5C47E /* hky_log.c in Sources */,
 				44D69C9B20BEE5A300B5C47E /* hky_rbtree.c in Sources */,
+				44A3100B20F64E860065D6EB /* hky_writev_chain.c in Sources */,
 				44D69CC920BEE5AE00B5C47E /* hky_errno.c in Sources */,
+				44A3101520F64EEF0065D6EB /* hky_readv_chain.c in Sources */,
 				44D69CCC20BEE5AE00B5C47E /* hky_linux_init.c in Sources */,
 				44D69C9720BEE5A300B5C47E /* hky_module.c in Sources */,
+				44A3100920F64E860065D6EB /* hky_udp_sendmsg_chain.c in Sources */,
 				44D69C9820BEE5A300B5C47E /* hky_palloc.c in Sources */,
 				44D69CD220BEE5AE00B5C47E /* hky_socket.c in Sources */,
 				44D69C9920BEE5A300B5C47E /* hky_parse.c in Sources */,
+				44A3100820F64E860065D6EB /* hky_udp_send.c in Sources */,
 				44D69CD320BEE5AE00B5C47E /* hky_solaris_init.c in Sources */,
 				44D69CD420BEE5AE00B5C47E /* hky_thread.c in Sources */,
 				44D69C9C20BEE5A300B5C47E /* hky_string.c in Sources */,

@@ -1,6 +1,9 @@
 
 #include "hky_config.h"
 #include "hky_core.h"
+#include "../event/hky_event.h"
+
+extern hky_os_io_t hky_os_io;
 
 #define HKY_SYSLOG_MAX_STR													\
 		HKY_MAX_ERROR_STR + sizeof("<255>Jan 01 00:00:00 ")-1				\
@@ -203,7 +206,8 @@ hky_syslog_writer(hky_log_t *log,hky_uint_t level,hky_uchar *buf,size_t len){
 
 	p = hky_snprintf(p, len, "%s", buf);
 
-	(void)hky_syslog_send
+    (void)hky_syslog_send(peer,msg,p-msg);
+    peer->busy=0;
 }
 ssize_t 
 hky_syslog_send(hky_syslog_peer_t *peer, hky_uchar *buf, size_t len) {
@@ -221,7 +225,7 @@ hky_syslog_send(hky_syslog_peer_t *peer, hky_uchar *buf, size_t len) {
 		n = hky_send(&peer->conn, buf, len);
 	}
 	else {
-		n = hky_os_io.send(&peer->conn, buf, len);
+		n=  hky_os_io.send(&peer->conn, buf, len);
 	}
 #if (HKY_HAVE_UNIX_DOMAIN)
 	if (n == HKY_ERROR && peer->server.sockaddr->sa_family == AF_UNIX) {

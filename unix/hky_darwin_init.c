@@ -17,5 +17,5 @@ hky_os_specific_init(hky_log_t  *log){
     hky_err_t err;
     hky_uint_t i;
 
-    size=sizeof(hky_darwin)
+    //size=sizeof(hky_darwin)
 }

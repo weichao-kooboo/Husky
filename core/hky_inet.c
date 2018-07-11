@@ -260,7 +260,7 @@ size_t hky_sock_ntop(struct sockaddr *sa, socklen_t socklen, hky_uchar *text,
 }
 
 
-hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
+hky_int_t hky_cmp_sockaddr(struct sockaddr *sa1, socklen_t slen1,
 	struct sockaddr *sa2, socklen_t slen2, hky_uint_t cmp_port) {
 	struct sockaddr_in *sin1, *sin2;
 #if (HKY_HAVE_INET6)
@@ -270,10 +270,10 @@ hky_int_t hky_cmp_sockaddr(struct sockaddr *sal, socklen_t slen1,
 	size_t len;
 	struct sockaddr_un *saun1, *saun2;
 #endif // (HKY_HAVE_UNIX_DOMAIN)
-	if (sal->sa_family != sa2->sa_family) {
+	if (sa1->sa_family != sa2->sa_family) {
 		return HKY_DECLINED;
 	}
-	switch (sal->sa_family)
+	switch (sa1->sa_family)
 	{
 #if (HKY_HAVE_INET6)
 	case AF_INET6:

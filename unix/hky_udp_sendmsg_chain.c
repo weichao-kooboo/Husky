@@ -80,9 +80,9 @@ hky_udp_unix_sendmsg_chain(hky_connection_t *c, hky_chain_t *in, off_t limit) {
 static hky_chain_t *
 hky_udp_output_chain_to_iovec(hky_iovec_t *vec,
 	hky_chain_t *in, hky_log_t *log) {
-
+    
 }
 static ssize_t 
 hky_sendmsg(hky_connection_t *c, hky_iovec_t *vec) {
-
+    
 }

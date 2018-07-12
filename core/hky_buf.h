@@ -45,7 +45,24 @@ struct hky_chain_s{
 
 hky_buf_t *hky_create_temp_buf(hky_pool_t *pool,size_t size);
 
+#define hky_buf_in_memory(b)	(b->temporary||b->memory||b->mmap)
+#define hky_buf_in_memory_only(b)	(hky_buf_in_memory(b)&&!b->in_file)
+
+#define hky_buf_special(b)							\
+		((b->flush||b->last_buf||b->sync)			\
+		&& !hky_buf_in_memory(b)&&!b->in_file)
+
+#define hky_buf_sync_only(b)						\
+		(b->sync									\
+		&& !hky_buf_in_memory(b)&&!b->in_file&&!b->flush&&!b->last_buf)
+#define hky_buf_size(b)								\
+		(hky_buf_in_memory(b)?(off_t)(b->last-b->pos):				\
+									(b->file_last-b->file_pos))
+	
+
 #define hky_alloc_buf(pool) hky_palloc(pool,sizeof(hky_buf_t))
 #define hky_calloc_buf(pool) hky_pcalloc(pool,sizeof(hky_buf_t))
+
+hky_chain_t *hky_chain_update_sent(hky_chain_t *in, off_t sent);
 
 #endif // HKY_BUF_H_INCLUDED

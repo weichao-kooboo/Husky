@@ -80,9 +80,77 @@ hky_udp_unix_sendmsg_chain(hky_connection_t *c, hky_chain_t *in, off_t limit) {
 static hky_chain_t *
 hky_udp_output_chain_to_iovec(hky_iovec_t *vec,
 	hky_chain_t *in, hky_log_t *log) {
-    
+	size_t total, size;
+	hky_uchar *prev;
+	hky_uint_t n, flush;
+	hky_chain_t *cl;
+	struct iovec *iov;
+
+	cl = in;
+	iov = NULL;
+	prev = NULL;
+	total = 0;
+	n = 0;
+	flush = 0;
+
+	for (; in && !flush; in = in->next) {
+		if (in->buf->flush || in->buf->last_buf) {
+			flush = 1;
+		}
+		if (hky_buf_special(in->buf)) {
+			continue;
+		}
+		if (in->buf->in_file) {
+			break;
+		}
+		if (!hky_buf_in_memory(in->buf)) {
+			hky_log_error(HKY_LOG_ALERT, log, 0,
+				"bad buf in output chain "
+				"t:%d r:%d f:%d %p %p-%p %p %O-%O",
+				cl->buf->temporary,
+				cl->buf->recycled,
+				cl->buf->in_file,
+				cl->buf->start,
+				cl->buf->pos,
+				cl->buf->last,
+				cl->buf->file,
+				cl->buf->file_pos,
+				cl->buf->file_last);
+			hky_debug_point();
+			return HKY_CHAIN_ERROR;
+		}
+		size = in->buf->last - in->buf->pos;
+
+		if (prev == in->buf->pos) {
+			iov->iov_len += size;
+		}
+		else {
+			if (n == vec->nalloc) {
+				hky_log_error(HKY_LOG_ALERT, log, 0,
+					"too many parts in a datagram");
+				return HKY_CHAIN_ERROR;
+			}
+			iov = &vec->iovs[n++];
+			iov->iov_base = (void*)in->buf->pos;
+			iov->iov_len = size;
+		}
+		prev = in->buf->pos + size;
+		total += size;
+	}
+	if (!flush) {
+#if (HKY_SUPPRESS_WARN)
+		vec->size = 0;
+		vec->count = 0;
+#endif // (HKY_SUPPRESS_WARN)
+		return cl;
+	}
+	vec->count = n;
+	vec->size = total;
+	return in;
 }
 static ssize_t 
 hky_sendmsg(hky_connection_t *c, hky_iovec_t *vec) {
-    
+	ssize_t n;
+	hky_err_t err;
+	struct msghdr	msg;
 }

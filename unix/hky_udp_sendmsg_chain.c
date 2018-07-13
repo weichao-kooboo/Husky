@@ -153,4 +153,113 @@ hky_sendmsg(hky_connection_t *c, hky_iovec_t *vec) {
 	ssize_t n;
 	hky_err_t err;
 	struct msghdr	msg;
+
+#if (HKY_HAVE_MSGHDR_MSG_CONTROL)
+#if (HKY_HAVE_IP_SENDSRCADDR)
+	hky_uchar msg_control[CMSG_SPACE(sizeof(struct in_addr))];
+#elif (HKY_HAVE_IP_PKTINFO)
+	hky_uchar msg_control[CMSG_SPACE(sizeof(struct in_pktinfo))];
+#endif // (HKY_HAVE_IP_SENDSRCADDR)
+
+#if (HKY_HAVE_INET6&&HKY_HAVE_IPV6_RECVPKTINFO)
+	hky_uchar	msg_control6[CMSG_SPACE(sizeof(struct in6_pktinfo))];
+#endif // (HKY_HAVE_INET6&&HKY_HAVE_IPV6_RECVPKTINFO)
+
+#endif // (HKY_HAVE_MSGHDR_MSG_CONTROL)
+	hky_memzero(&msg, sizeof(struct msghdr));
+	if (c->socklen) {
+		msg.msg_name = c->sockaddr;
+		msg.msg_namelen = c->socklen;
+	}
+	msg.msg_iov = vec->iovs;
+	msg.msg_iovlen = vec->count;
+
+#if (HKY_HAVE_MSGHDR_MSG_CONTROL)
+	if (c->listening&&c->listening->wildcard&&c->local_sockaddr) {
+#if (HKY_HAVE_IP_SENDSRCADDR)
+		if (c->local_sockaddr->sa_family == AF_INET) {
+			struct cmsghdr *cmsg;
+			struct in_addr *addr;
+			struct sockaddr_in *sin;
+
+			msg.msg_control = &msg_control;
+			msg.msg_controllen = sizeof(msg_control);
+
+			cmsg = CMSG_FIRSTHDR(&msg);
+			cmsg->cmsg_level = IPPROTO_IP;
+			cmsg->cmsg_type = IP_SENDSRCADDR;
+			cmsg->cmsg_len = CMSG_LEN(sizeof(struct in_addr));
+
+			sin = (struct sockaddr_in *)c->local_sockaddr;
+			addr = (struct in_addr *)CMSG_DATA(cmsg);
+			*addr = sin->sin_addr;
+		}
+#elif	(HKY_HAVE_IP_PKTINFO)
+		if (c->local_sockaddr->sa_family == AF_INET) {
+			struct cmsghdr *cmsg;
+			struct in_pktinfo *pkt;
+			struct sockaddr_in *sin;
+
+			msg.msg_control = &msg_control;
+			msg.msg_controllen = sizeof(msg_control);
+
+			cmsg.CMSG_FIRSTHDR(&msg);
+			cmsg->cmsg_level = IPPROTO_IP;
+			cmsg->cmsg_type = IP_PKTINFO;
+			cmsg->cmsg_len = CMSG_LEN(sizeof(struct in_pktinfo));
+
+			sin = (struct sockaddr_in *)c->local_sockaddr;
+
+			pkt = (struct in_pktinfo *)CMSG_DATA(cmsg);
+			hky_memzero(pkt, sizeof(struct in_pktinfo));
+			pkt->ipi_spec_dst = sin->sin_addr;
+		}
+#endif // (HKY_HAVE_IP_SENDSRCADDR)
+#if (HKY_HAVE_INET6&&HKY_HAVE_IPV6_RECVPKTINFO)
+		if (c->local_sockaddr->sa_family == AF_INET6) {
+			struct cmsghdr *cmsg;
+			struct in6_pktinfo *pkt6;
+			struct sockaddr_in6 *sin6;
+
+			msg.msg_control = &msg_control6;
+			msg.msg_controllen = sizeof(msg_control6);
+
+			cmsg = CMSG_FIRSTHDR(&msg);
+			cmsg->cmsg_level = IPPROTO_IPV6;
+			cmsg->cmsg_type = IPV6_PKTINFO;
+			cmsg->cmsg_len = CMSG_LEN(sizeof(struct in6_pktinfo));
+
+			sin6 = (struct sockaddr_in6 *)c->local_sockaddr;
+
+			pkt6 = (struct in6_pktinfo *)CMSG_DATA(cmsg);
+			hky_memzero(pkt6, sizeof(struct in6_pktinfo));
+			pkt6->ipi6_addr = sin6->sin6_addr;
+		}
+#endif // (HKY_HAVE_INET6&&HKY_HAVE_IPV6_RECVPKTINFO)
+	}
+#endif // (HKY_HAVE_MSGHDR_MSG_CONTROL)
+eintr:
+	n = sendmsg(c->fd, &msg, 0);
+	hky_log_debug2(HKY_LOG_DEBUG_EVENT, c->log, 0,
+		"sendmsg: %z of %uz", n, vec->size);
+
+	if (n == -1) {
+		err = hky_errno;
+		switch (err)
+		{
+		case HKY_EAGAIN:
+			hky_log_debug0(HKY_LOG_DEBUG_EVENT, c->log, err,
+				"sendmsg() not ready");
+			return HKY_AGAIN;
+		case HKY_EINTR:
+			hky_log_debug0(HKY_LOG_DEBUG_EVENT, c->log, err,
+				"sendmsg() was interrupted");
+			goto eintr;
+		default:
+			c->write->error = 1;
+			hky_connection_error(c, err, "sendmsg() failed");
+			return HKY_ERROR;
+		}
+	}
+	return n;
 }

@@ -52,6 +52,10 @@ hky_chain_t *hky_output_chain_to_iovec(hky_iovec_t *vec, hky_chain_t *in,
 
 ssize_t hky_writev(hky_connection_t *c, hky_iovec_t *vec);
 
+extern hky_os_io_t hky_os_io;
+extern hky_int_t hky_ncpu;
+extern hky_uint_t hky_tcp_nodelay_and_tcp_nopush;
+
 /*
 * 对所有操作系统进行统一初始化工作
 */
